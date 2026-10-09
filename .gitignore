@@ -1,0 +1,7 @@
+# temperature histories: distributed as the release asset P4_code_histories.zip
+sim/mophong_*.npz
+# generated output
+sim/out/
+sim/*.log
+sim/*.err
+__pycache__/
