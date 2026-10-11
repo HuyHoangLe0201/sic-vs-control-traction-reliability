@@ -97,7 +97,7 @@ algebra libraries.
 | Table 1, device models | `linhkien.py` |
 | Figs. 1 and 3, drive, leg topologies and conduction paths | `hinh_mach.py` (schemdraw) |
 | Fig. 2, Fig. 4, mission | `hinh_bai.py`, `hoso_nhiemvu.py` |
-| Figs. 5, 6 and 12, damage mechanism, ceiling and break-even concept, runaway construction | `hinh_coche.py` |
+| Figs. 5, 6 and 12, damage mechanism, ceiling and break-even concept, runaway margins | `hinh_coche.py` (Fig. 12 from `bang_t2.md`) |
 | Fig. 11, switching-period excursions | `hinh_coche.py` with `xung_policy.py` |
 | Sec. 3.1–3.2, Theorem 1, Fig. 7 | `tonhao.py`, `tran_lp.py` |
 | Sec. 3.3–3.4, Proposition 1, ripple-aware law | `dao_dong.py`, `p15_bound.py` |

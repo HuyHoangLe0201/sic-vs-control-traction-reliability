@@ -197,47 +197,48 @@ def fig_pulse():
 
 
 def fig_runaway():
-    """Figure 12: graphical construction of the runaway margin (Proposition 3) in normalised variables u = c (T - T_w)
-    and y = R c p, for the SiC chip at maximum speed (L_c = 0.062, Table C.3). The heat removal is y = u; the loss is
-    y = mu L_c f(u) with f = exp(u) (a) or f = 1 + u (b). Filled markers: stable equilibria; open: unstable."""
-    from scipy.optimize import brentq
-    Lc = 0.062
-    u = np.linspace(0, 2.6, 400)
-    mu_e, mu_l, mu_i = 1 / (np.e * Lc), 1 / Lc, 4.0
-    fig, ax = plt.subplots(1, 2, figsize=(190 * MM, 62 * MM))
-    # (a) exponential temperature dependence
-    a = ax[0]
-    a.plot(u, u, color=OK['black'], lw=1.3, label='heat removal')
-    a.plot(u, Lc * np.exp(u), color=OK['blue'], lw=1.1, label='loss, rated load')
-    a.plot(u, mu_i * Lc * np.exp(u), color=OK['grey'], lw=0.9, ls=':', label=f'loss, load ×{mu_i:g}')
-    a.plot(u, mu_e * Lc * np.exp(u), color=OK['verm'], lw=1.1, ls='--',
-           label=f'loss, load ×{mu_e:.1f} $=1/(e\\mathcal{{L}}_c)$')
-    g = lambda x, mu: mu * Lc * np.exp(x) - x
-    xs0 = brentq(g, 0, 1, args=(1.0,)); x1, x2 = brentq(g, 0, 1, args=(mu_i,)), brentq(g, 1, 2.6, args=(mu_i,))
-    a.plot(xs0, xs0, 'o', color=OK['blue'], ms=4)
-    a.plot(x1, x1, 'o', color=OK['grey'], ms=4); a.plot(x2, x2, 'o', mfc='white', mec=OK['grey'], ms=4)
-    a.plot(1, 1, 'o', color=OK['verm'], ms=4)
-    a.annotate('runaway\nthreshold', (1, 1), (1.75, 0.45), fontsize=7, color=OK['verm'], ha='center',
-               arrowprops=dict(arrowstyle='->', lw=0.6, color=OK['verm']))
-    a.legend(frameon=False, loc='upper left', fontsize=7)
-    a.set_title('Exponential loss growth', fontsize=8)
-    # (b) linear temperature dependence
-    b = ax[1]
-    b.plot(u, u, color=OK['black'], lw=1.3, label='heat removal')
-    b.plot(u, Lc * (1 + u), color=OK['blue'], lw=1.1, label='loss, rated load')
-    b.plot(u, 8 * Lc * (1 + u), color=OK['grey'], lw=0.9, ls=':', label='loss, load ×8')
-    b.plot(u, mu_l * Lc * (1 + u), color=OK['verm'], lw=1.1, ls='--',
-           label=f'loss, load ×{mu_l:.0f} $=1/\\mathcal{{L}}_c$')
-    xe, xe8 = Lc / (1 - Lc), 8 * Lc / (1 - 8 * Lc)
-    b.plot(xe, xe, 'o', color=OK['blue'], ms=4); b.plot(xe8, xe8, 'o', color=OK['grey'], ms=4)
-    b.text(0.35, 2.25, 'parallel to the heat removal:\nno equilibrium', color=OK['verm'], fontsize=7, ha='left',
-           va='center', rotation=0)
-    b.legend(frameon=False, loc='lower right', bbox_to_anchor=(1.0, 0.1), fontsize=7)
-    b.set_title('Linear loss growth', fontsize=8)
-    for k, ax_ in enumerate(ax):
-        ax_.set_xlim(0, 2.6); ax_.set_ylim(0, 2.6)
-        ax_.set_xlabel('normalised junction rise $c\\,(T-T_w)$'); ax_.set_ylabel('normalised power $R\\,c\\,p$')
-        ax_.grid(alpha=.3, lw=0.4); label(ax_, '(a)' if k == 0 else '(b)')
+    """Figure 12: runaway load margins of the hottest chip (baseline policy) for the operating points of Table C.3,
+    read from bang_t2.md (output of bang_t2.py): single-chip lower bound 1/(e L_c), value 1/L_c for a linear loss
+    increase, and linear-stability margin 1/rho(Z K) including the thermal coupling between chips."""
+    rows = {}
+    for line in open(os.path.join(HERE, 'bang_t2.md'), encoding='utf-8'):
+        f = [x.strip() for x in line.strip().strip('|').split('|')]
+        if len(f) > 10 and f[0] in ('Si-NPC', 'Si-ANPC', 'SiC-ANPC'):
+            rows[(f[0], f[1])] = (float(f[7]), float(f[8]), float(f[10]))
+    sel = [('Si-NPC', 'motor, start', 'motoring, start-up'), ('Si-NPC', 'motor, top speed', 'motoring, maximum speed'),
+           ('Si-NPC', 'overload 1.5x', 'overload, 1.5 × rated'),
+           ('Si-ANPC', 'motor, top speed', 'motoring, maximum speed'), ('Si-ANPC', 'overload 1.5x', 'overload, 1.5 × rated'),
+           ('SiC-ANPC', 'motor, start', 'motoring, start-up'), ('SiC-ANPC', 'motor, top speed', 'motoring, maximum speed'),
+           ('SiC-ANPC', 'brake, top speed', 'braking, maximum speed'), ('SiC-ANPC', 'overload 1.5x', 'overload, 1.5 × rated')]
+    col = {'Si-NPC': OK['blue'], 'Si-ANPC': OK['verm'], 'SiC-ANPC': OK['green']}
+    fig, ax = plt.subplots(figsize=(190 * MM, 64 * MM))
+    y, ticks, labels, prev = 0.0, [], [], None
+    for cfg, key, lab in sel:
+        if prev is not None and cfg != prev:
+            y -= 0.6
+        lo, hi, rho = rows[(cfg, key)]
+        c = col[cfg]
+        ax.plot([lo, hi], [y, y], color=c, lw=3.0, alpha=0.35, solid_capstyle='butt')
+        ax.plot(lo, y, 'o', color=c, ms=5)
+        ax.plot(hi, y, 'o', mfc='white', mec=c, ms=5)
+        ax.plot(rho, y, 'D', color=c, ms=4)
+        ax.text(lo / 1.12, y, f'{lo:.1f}', ha='right', va='center', fontsize=7, color=c)
+        ticks.append(y); labels.append(f'{cfg}: {lab}')
+        prev = cfg; y -= 1.0
+    ax.axvline(1.0, color=OK['black'], lw=1.0, ls='--')
+    ax.axvspan(0.5, 1.0, color=OK['grey'], alpha=0.2, lw=0)
+    ax.text(0.97, ticks[-1] - 0.15, 'thermal\nrunaway', ha='right', va='bottom', fontsize=7, color=OK['black'])
+    ax.set_xscale('log'); ax.set_xlim(0.5, 60)
+    ax.set_xticks([0.5, 1, 2, 5, 10, 20, 50]); ax.set_xticklabels(['0.5', '1', '2', '5', '10', '20', '50'])
+    ax.set_yticks(ticks); ax.set_yticklabels(labels, fontsize=7)
+    ax.set_ylim(y + 0.4, 0.7)
+    ax.set_xlabel('factor by which the chip loss could grow before thermal runaway')
+    ax.grid(axis='x', alpha=.3, lw=0.4, which='both')
+    from matplotlib.lines import Line2D
+    hd = [Line2D([], [], ls='', marker='o', color=OK['grey'], ms=5, label='lower bound $1/(e\\mathcal{L}_c)$'),
+          Line2D([], [], ls='', marker='D', color=OK['grey'], ms=4, label='with thermal coupling $1/\\varrho(\\mathbf{ZK})$'),
+          Line2D([], [], ls='', marker='o', mfc='white', mec=OK['grey'], ms=5, label='linear loss growth $1/\\mathcal{L}_c$')]
+    ax.legend(handles=hd, frameon=False, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=3, fontsize=7)
     save(fig, 12)
 
 
