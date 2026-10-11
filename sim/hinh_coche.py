@@ -160,7 +160,7 @@ def fig_concept():
 
 
 def fig_pulse():
-    """Figure 12: junction temperature of the outer transistor T1 of Si-ANPC over one output period at a high output
+    """Figure 11: junction temperature of the outer transistor T1 of Si-ANPC over one output period at a high output
     frequency (baseline policy), carrier-averaged versus pulse-resolved model, with and without the microsecond term."""
     import sys
     sys.path.insert(0, HERE)
@@ -193,42 +193,57 @@ def fig_pulse():
         ax[1].plot(tt[zs], (y - ref)[zs], color=col, ls=ls, lw=lw)
     ax[1].set_xlim(tt[zs][0], tt[zs][-1]); ax[1].set_xlabel('time (ms), two switching periods')
     ax[1].grid(alpha=.3, lw=0.4); label(ax[1], '(b)')
-    save(fig, 12)
+    save(fig, 11)
 
 
 def fig_runaway():
-    """Figure 13: graphical construction of the runaway margin (Proposition 3) with the SiC values at maximum speed:
-    p_c = 125 W, c = 0.0052 1/K, L_c = 0.062 (Table C.3)."""
-    pc, cc, Lc = 125.0, 0.0052, 0.062
-    R = Lc / (pc * cc)                                   # K/W
-    x = np.linspace(0, 330, 600)
-    fig, a = plt.subplots(figsize=(90 * MM, 70 * MM))
-    a.plot(x, x / R, color=OK['black'], lw=1.2, label='heat removal $x/R$')
-    a.plot(x, pc * np.exp(cc * x), color=OK['blue'], lw=1.0, label='loss, rated: $p_c\\,e^{cx}$')
-    mu_e = 1 / (np.e * Lc)
-    a.plot(x, mu_e * pc * np.exp(cc * x), color=OK['verm'], lw=1.0, ls='--',
-           label=f'loss $\\times 1/(e\\mathcal{{L}}_c)$ = {mu_e:.1f}: tangent')
-    mu_l = 1 / Lc
-    a.plot(x, mu_l * pc * (1 + cc * x), color=OK['orange'], lw=1.0, ls='-.',
-           label=f'linear law $\\times 1/\\mathcal{{L}}_c$ = {mu_l:.0f}: parallel')
-    xe = 1 / cc
-    a.plot(xe, xe / R, 'o', color=OK['verm'], ms=4)
-    a.annotate('runaway\nthreshold', (xe, xe / R), (xe + 30, xe / R - 900), fontsize=7, color=OK['verm'],
+    """Figure 12: graphical construction of the runaway margin (Proposition 3) in normalised variables u = c (T - T_w)
+    and y = R c p, for the SiC chip at maximum speed (L_c = 0.062, Table C.3). The heat removal is y = u; the loss is
+    y = mu L_c f(u) with f = exp(u) (a) or f = 1 + u (b). Filled markers: stable equilibria; open: unstable."""
+    from scipy.optimize import brentq
+    Lc = 0.062
+    u = np.linspace(0, 2.6, 400)
+    mu_e, mu_l, mu_i = 1 / (np.e * Lc), 1 / Lc, 4.0
+    fig, ax = plt.subplots(1, 2, figsize=(190 * MM, 62 * MM))
+    # (a) exponential temperature dependence
+    a = ax[0]
+    a.plot(u, u, color=OK['black'], lw=1.3, label='heat removal')
+    a.plot(u, Lc * np.exp(u), color=OK['blue'], lw=1.1, label='loss, rated load')
+    a.plot(u, mu_i * Lc * np.exp(u), color=OK['grey'], lw=0.9, ls=':', label=f'loss, load ×{mu_i:g}')
+    a.plot(u, mu_e * Lc * np.exp(u), color=OK['verm'], lw=1.1, ls='--',
+           label=f'loss, load ×{mu_e:.1f} $=1/(e\\mathcal{{L}}_c)$')
+    g = lambda x, mu: mu * Lc * np.exp(x) - x
+    xs0 = brentq(g, 0, 1, args=(1.0,)); x1, x2 = brentq(g, 0, 1, args=(mu_i,)), brentq(g, 1, 2.6, args=(mu_i,))
+    a.plot(xs0, xs0, 'o', color=OK['blue'], ms=4)
+    a.plot(x1, x1, 'o', color=OK['grey'], ms=4); a.plot(x2, x2, 'o', mfc='white', mec=OK['grey'], ms=4)
+    a.plot(1, 1, 'o', color=OK['verm'], ms=4)
+    a.annotate('runaway\nthreshold', (1, 1), (1.75, 0.45), fontsize=7, color=OK['verm'], ha='center',
                arrowprops=dict(arrowstyle='->', lw=0.6, color=OK['verm']))
-    xs = x[np.argmin(np.abs(x / R - pc * np.exp(cc * x))[:200])]
-    a.plot(xs, xs / R, 'o', color=OK['blue'], ms=4)
-    a.annotate('operating\nequilibrium', (xs, xs / R), (xs + 45, xs / R + 900), fontsize=7, color=OK['blue'],
-               arrowprops=dict(arrowstyle='->', lw=0.6, color=OK['blue']))
-    a.set_xlim(0, 330); a.set_ylim(0, 3500)
-    a.set_xlabel('junction rise above coolant $x=T-T_w$ (K)'); a.set_ylabel('power (W)')
-    a.legend(frameon=False, loc='upper left', fontsize=6.5)
-    a.grid(alpha=.3, lw=0.4)
-    save(fig, 13)
+    a.legend(frameon=False, loc='upper left', fontsize=7)
+    a.set_title('Exponential loss growth', fontsize=8)
+    # (b) linear temperature dependence
+    b = ax[1]
+    b.plot(u, u, color=OK['black'], lw=1.3, label='heat removal')
+    b.plot(u, Lc * (1 + u), color=OK['blue'], lw=1.1, label='loss, rated load')
+    b.plot(u, 8 * Lc * (1 + u), color=OK['grey'], lw=0.9, ls=':', label='loss, load ×8')
+    b.plot(u, mu_l * Lc * (1 + u), color=OK['verm'], lw=1.1, ls='--',
+           label=f'loss, load ×{mu_l:.0f} $=1/\\mathcal{{L}}_c$')
+    xe, xe8 = Lc / (1 - Lc), 8 * Lc / (1 - 8 * Lc)
+    b.plot(xe, xe, 'o', color=OK['blue'], ms=4); b.plot(xe8, xe8, 'o', color=OK['grey'], ms=4)
+    b.text(0.35, 2.25, 'parallel to the heat removal:\nno equilibrium', color=OK['verm'], fontsize=7, ha='left',
+           va='center', rotation=0)
+    b.legend(frameon=False, loc='lower right', bbox_to_anchor=(1.0, 0.1), fontsize=7)
+    b.set_title('Linear loss growth', fontsize=8)
+    for k, ax_ in enumerate(ax):
+        ax_.set_xlim(0, 2.6); ax_.set_ylim(0, 2.6)
+        ax_.set_xlabel('normalised junction rise $c\\,(T-T_w)$'); ax_.set_ylabel('normalised power $R\\,c\\,p$')
+        ax_.grid(alpha=.3, lw=0.4); label(ax_, '(a)' if k == 0 else '(b)')
+    save(fig, 12)
 
 
 if __name__ == '__main__':
     import sys
-    todo = sys.argv[1:] or ['5', '6', '12', '13']
-    for n, f_ in (('5', fig_damage), ('6', fig_concept), ('12', fig_pulse), ('13', fig_runaway)):
+    todo = sys.argv[1:] or ['5', '6', '11', '12']
+    for n, f_ in (('5', fig_damage), ('6', fig_concept), ('11', fig_pulse), ('12', fig_runaway)):
         if n in todo:
             f_()

@@ -1,5 +1,5 @@
 """Publication figures for the MR manuscript (baseline variant fvdr), following the Elsevier artwork rules:
-vector PDF (fonts embedded), one file per figure (Figures 2, 4, 7-11; Figures 1 and 3 from hinh_mach.py, 5 and 6 from hinh_coche.py), single column 90 mm / full width 190 mm,
+vector PDF (fonts embedded), one file per figure (Figures 2, 4, 7-10; Figures 1 and 3 from hinh_mach.py, 5, 6, 11, 12 from hinh_coche.py), single column 90 mm / full width 190 mm,
 text of at least 7 pt, colour-blind-safe Okabe-Ito palette with redundant line styles and markers.
 
 python hinh_bai.py  -> Figure_N.pdf (+ .png at 1000 dpi) in the output folder
@@ -26,7 +26,7 @@ plt.rcParams.update({'font.size': 8, 'axes.labelsize': 8, 'legend.fontsize': 7, 
                      'figure.constrained_layout.use': True})   # exact Elsevier widths, no cropping
 
 
-FIGNO = {'M': 2, 1: 4, 2: 7, 3: 8, 4: 9, 5: 10, 8: 11}   # internal id -> figure number (1, 3: hinh_mach.py; 5, 6: hinh_coche.py; code figures 6, 7 unused)
+FIGNO = {'M': 2, 1: 4, 2: 7, 4: 8, 5: 9, 8: 10}   # internal id -> figure number (1, 3: hinh_mach.py; 5, 6, 11, 12: hinh_coche.py; code figures 3, 6, 7 unused)
 
 
 def save(fig, n):
@@ -326,5 +326,5 @@ def figGA():
 
 if __name__ == '__main__':
     import sys
-    for n in (sys.argv[1:] or ['M', '1', '2', '3', '4', '5', '8']):
+    for n in (sys.argv[1:] or ['M', '1', '2', '4', '5', '8']):
         globals()[f'fig{n}']()
