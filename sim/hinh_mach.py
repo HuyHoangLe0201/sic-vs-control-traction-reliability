@@ -162,8 +162,8 @@ def paths():
         for p in pl:
             xs, ys = zip(*p)
             a.plot(xs, ys, color=VERM, lw=4.0 if share == 1 else 2.6, alpha=0.45, solid_capstyle='round', zorder=5)
-        a.annotate('', (2.0, -3.75), (1.15, -3.75), arrowprops=dict(arrowstyle='-|>', color=VERM, lw=1.0))
-        a.text(1.6, -3.62, '$i>0$', ha='center', va='bottom', fontsize=FS, color=VERM)
+        a.annotate('', (1.85, -4.0), (1.05, -4.0), arrowprops=dict(arrowstyle='-|>', color=VERM, lw=1.2, mutation_scale=9), zorder=6)
+        a.text(2.9, -3.72, '$i>0$', ha='center', va='bottom', fontsize=FS, color=VERM)
         if share != 1:
             a.text(XC + 1.25, -1.75, '$i/2$', fontsize=FS, color=VERM, ha='center')
             a.text(XC + 1.25, -6.25, '$i/2$', fontsize=FS, color=VERM, ha='center', va='top')
