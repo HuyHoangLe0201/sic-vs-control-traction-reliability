@@ -20,7 +20,9 @@ FSW = 1500.0
 ALLOC = 'interleaved'   # 'interleaved': choices spread evenly over the carrier periods; 'blocks': contiguous
 
 
-def policy_ripple(tp, I, m, c, fe, Tchip, w, pulsed=True, nper=None, spp=400, fosters=None):
+def policy_ripple(tp, I, m, c, fe, Tchip, w, pulsed=True, nper=None, spp=400, fosters=None, wave=False):
+    """Peak-to-peak ripple per chip for each Foster network; with wave=True also the time axis and the junction-rise
+    waveforms (used only for the illustration in Figure 12)."""
     tech = th.TECH[tp['tech']]
     nc = tp['nchip']
     dt = 1.0 / (FSW * spp)
@@ -105,7 +107,7 @@ def policy_ripple(tp, I, m, c, fe, Tchip, w, pulsed=True, nper=None, spp=400, fo
                         P[:, kD] += msk * wr * FSW * eD[kD]
     per = int(round(1 / fe / dt))
     j0 = 2 if nper > 4 else 1
-    out = []
+    out, waves = [], []
     for R, tau in (fosters or [tp['foster']]):
         a = np.exp(-dt / tau)
         Rk = tp['rth'][:, None] * R[None, :]
@@ -119,6 +121,9 @@ def policy_ripple(tp, I, m, c, fe, Tchip, w, pulsed=True, nper=None, spp=400, fo
                 Tj[:, j] += y
         rip = np.array([Tj[j * per:(j + 1) * per].max(0) - Tj[j * per:(j + 1) * per].min(0) for j in range(j0, nper)])
         out.append(rip.max(0))
+        waves.append(Tj)
+    if wave:
+        return out, P.mean(0), t, waves
     return out, P.mean(0)
 
 

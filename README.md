@@ -62,7 +62,7 @@ python bang_allvar.py
 python so_lieu_bai.py
 ```
 
-Figures 1–11 (`Figure_N.pdf`, `.png`) and Tables C.4–C.5 (`appC_allvar.tex`) are written to `sim/out/` (or to the folder
+Figures 1–13 (`Figure_N.pdf`, `.png`) and Tables C.4–C.5 (`appC_allvar.tex`) are written to `sim/out/` (or to the folder
 given by the environment variable `P4_OUT`); `so_lieu_bai.md` lists the numbers quoted in the text. The other
 post-processing scripts (`p04_summary.py`, `phantich_p0.py`, `p11_rainflow.py`, `p12_system.py`, `mc_b10.py`,
 `sobol2.py`, `sobol3.py`, ...) regenerate the corresponding files in `sim/summaries/`.
@@ -97,7 +97,8 @@ algebra libraries.
 | Table 1, device models | `linhkien.py` |
 | Figs. 1 and 3, drive, leg topologies and conduction paths | `hinh_mach.py` (schemdraw) |
 | Fig. 2, Fig. 4, mission | `hinh_bai.py`, `hoso_nhiemvu.py` |
-| Figs. 5 and 6, damage mechanism, ceiling and break-even concept | `hinh_coche.py` |
+| Figs. 5, 6 and 13, damage mechanism, ceiling and break-even concept, runaway construction | `hinh_coche.py` |
+| Fig. 12, switching-period excursions | `hinh_coche.py` with `xung_policy.py` |
 | Sec. 3.1–3.2, Theorem 1, Fig. 7 | `tonhao.py`, `tran_lp.py` |
 | Sec. 3.3–3.4, Proposition 1, ripple-aware law, Fig. 8 | `dao_dong.py`, `p15_bound.py` |
 | Sec. 2.4, rainflow and CIPS08 | `tonthuong.py` |

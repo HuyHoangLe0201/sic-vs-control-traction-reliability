@@ -21,6 +21,9 @@ plt.rcParams.update({'font.size': 8, 'axes.labelsize': 8, 'legend.fontsize': 7, 
 # normalised Foster network of the Si IGBT (Table C.1)
 A_SI = np.array([0.0124, 0.0739, 0.3505, 0.5632])
 TAU_SI = np.array([0.0196, 1.40, 17.9, 94.4]) * 1e-3
+# normalised Foster network of the SiC MOSFET (Table C.1)
+A_SIC = np.array([0.0213, 0.0732, 0.233, 0.665])
+TAU_SIC = np.array([0.0151, 0.457, 6.19, 34.5]) * 1e-3
 
 
 def label(ax, s):
@@ -49,45 +52,57 @@ def periodic_rise(p, fe, a=A_SI, tau=TAU_SI):
 def fig_damage():
     th = np.linspace(0, 2 * np.pi, 720, endpoint=False)
     p = np.clip(np.sin(th), 0, None) ** 2          # conduction-dominated loss of one chip: one half-period per cycle
-    fig, ax = plt.subplots(1, 2, figsize=(190 * MM, 62 * MM), gridspec_kw=dict(width_ratios=[1, 1.25]))
+    fig, ax = plt.subplots(1, 3, figsize=(190 * MM, 62 * MM), gridspec_kw=dict(width_ratios=[1, 1, 1.15]))
+    # (a) thermal impedance seen by a loss harmonic of frequency f (Table 1 resistances, Table C.1 Foster networks)
     a = ax[0]
+    f = np.logspace(-1, 3, 400)
+    for R, aa, tt, lab, c, ls in ((53, A_SI, TAU_SI, 'Si IGBT', OK['blue'], '-'), (81, A_SI, TAU_SI, 'Si FWD', OK['sky'], '--'),
+                                 (60, A_SIC, TAU_SIC, 'SiC MOSFET', OK['verm'], '-.')):
+        z = np.abs((aa[None, :] / (1 + 1j * 2 * np.pi * f[:, None] * tt[None, :])).sum(axis=1))
+        a.loglog(f, R * z, color=c, ls=ls, label=lab)
+    a.axvspan(0.5, 250, color=OK['grey'], alpha=0.15, lw=0)
+    a.text(11, 105, 'output frequencies\nof the mission', ha='center', va='center', fontsize=7, color=OK['grey'])
+    a.set_xlim(0.1, 1000); a.set_ylim(1, 150)
+    a.set_xlabel('frequency (Hz)'); a.set_ylabel('$|Z_{th(j-c)}|$ (K/kW)')
+    a.legend(frameon=False, loc='lower left', fontsize=7)
+    a.grid(alpha=.3, lw=0.4, which='both'); label(a, '(a)')
+    # (b) periodic junction temperature for one loss waveform at three output frequencies (Si IGBT network)
+    b = ax[1]
     deg = np.degrees(th)
-    a.fill_between(deg, 0, p, color=OK['grey'], alpha=0.25, lw=0, label='chip loss $p/p_{\\max}$')
+    b.fill_between(deg, 0, p, color=OK['grey'], alpha=0.25, lw=0, label='loss $p/p_{\\max}$')
     for fe, c, ls in ((2.0, OK['verm'], '-'), (10.0, OK['orange'], '--'), (50.0, OK['blue'], '-.')):
         T = periodic_rise(p, fe)
-        a.plot(deg, T - T.min(), color=c, ls=ls, label=f'$\\tilde T_j$, $f_e$ = {fe:g} Hz (ripple {T.max() - T.min():.2f})')
-    a.set_xlim(0, 360); a.set_xticks([0, 90, 180, 270, 360]); a.set_ylim(0, 1.25)
-    a.set_xlabel('angle within the output period (deg)'); a.set_ylabel('normalised to $R\\,p_{\\max}$')
-    a.legend(frameon=False, loc='upper right', fontsize=7)
-    a.grid(alpha=.3, lw=0.4); label(a, '(a)')
-
-    # (b) schematic history at start-up: slow component plus ripple at a rising output frequency
-    b = ax[1]
+        b.plot(deg, T - T.min(), color=c, ls=ls, label=f'{fe:g} Hz: ripple {T.max() - T.min():.2f}')
+    b.set_xlim(0, 360); b.set_xticks([0, 90, 180, 270, 360]); b.set_ylim(0, 1.3)
+    b.set_xlabel('angle in the output period (deg)'); b.set_ylabel('$\\tilde T_j/(R\\,p_{\\max})$')
+    b.legend(frameon=False, loc='upper right', fontsize=7)
+    b.grid(alpha=.3, lw=0.4); label(b, '(b)')
+    # (c) schematic history at start-up: slow component plus ripple at a rising output frequency
+    c_ = ax[2]
     t = np.linspace(0, 12, 12000)
     fe = 0.4 + 0.8 * t                                   # output frequency rising during acceleration
-    ripple_of = {f: np.ptp(periodic_rise(p, f)) for f in np.unique(np.round(fe, 2))}
-    r = 30.0 * np.array([ripple_of[f] for f in np.round(fe, 2)]) / ripple_of[0.4]
+    ripple_of = {fq: np.ptp(periodic_rise(p, fq)) for fq in np.unique(np.round(fe, 2))}
+    r = 30.0 * np.array([ripple_of[fq] for fq in np.round(fe, 2)]) / ripple_of[0.4]
     tbar = 40 + 22 * (1 - np.exp(-t / 5.0))
     phase = 2 * np.pi * np.cumsum(fe) * (t[1] - t[0])
     Tj = tbar + r / 2 * np.sin(phase)
-    b.plot(t, Tj, color=OK['blue'], lw=0.8, label='$T_j$')
-    b.plot(t, tbar, color=OK['black'], ls='--', lw=1.0, label='slow component $\\bar T_j$')
-    b.plot(t, tbar + r / 2, color=OK['grey'], lw=0.5, ls=':')
-    b.plot(t, tbar - r / 2, color=OK['grey'], lw=0.5, ls=':', label='ripple envelope, range $r$')
-    # annotate the ripple cycle that starts at the minimum near t = 0.8 s (heating half-period up to the next maximum)
+    c_.plot(t, Tj, color=OK['blue'], lw=0.7, label='$T_j$')
+    c_.plot(t, tbar, color=OK['black'], ls='--', lw=1.0, label='slow part $\\bar T_j$')
+    c_.plot(t, tbar - r / 2, color=OK['grey'], lw=0.5, ls=':', label='ripple envelope')
+    c_.plot(t, tbar + r / 2, color=OK['grey'], lw=0.5, ls=':')
     i0 = np.searchsorted(t, 0.6)
     k = i0 + np.argmin(Tj[i0:i0 + 1500]); k2 = k + np.argmax(Tj[k:k + 1200])
-    b.annotate('', (t[k] - 0.25, Tj[k2]), (t[k] - 0.25, Tj[k]), arrowprops=dict(arrowstyle='<->', lw=0.7, color=OK['verm']))
-    b.plot([t[k] - 0.4, t[k2]], [Tj[k2]] * 2, color=OK['verm'], lw=0.5, ls=':')
-    b.text(t[k] - 0.35, (Tj[k] + Tj[k2]) / 2, '$r$', color=OK['verm'], ha='right', va='center', fontsize=8)
-    b.annotate('', (t[k2], Tj[k2] + 3.0), (t[k], Tj[k2] + 3.0), arrowprops=dict(arrowstyle='<->', lw=0.7, color=OK['verm']))
-    b.text((t[k] + t[k2]) / 2, Tj[k2] + 3.6, '$t_{on}=1/(2f_e)$', color=OK['verm'], ha='center', va='bottom', fontsize=7)
-    b.plot([t[k] - 0.1, t[k] + 1.3], [Tj[k]] * 2, color=OK['verm'], lw=0.6)
-    b.text(t[k] + 1.4, Tj[k] - 0.5, '$T_{\\min}=\\bar T_j-r/2$', color=OK['verm'], va='center', fontsize=7)
-    b.set_xlim(0, 12); b.set_ylim(15, 85)
-    b.set_xlabel('time after start (s); $f_e$ rises from 0.4 to 10 Hz'); b.set_ylabel('$T_j$ (°C)')
-    b.legend(frameon=False, loc='upper right', fontsize=7, ncol=1)
-    b.grid(alpha=.3, lw=0.4); label(b, '(b)')
+    c_.annotate('', (t[k] - 0.25, Tj[k2]), (t[k] - 0.25, Tj[k]), arrowprops=dict(arrowstyle='<->', lw=0.7, color=OK['verm']))
+    c_.plot([t[k] - 0.4, t[k2]], [Tj[k2]] * 2, color=OK['verm'], lw=0.5, ls=':')
+    c_.text(t[k] - 0.35, (Tj[k] + Tj[k2]) / 2, '$r$', color=OK['verm'], ha='right', va='center', fontsize=8)
+    c_.annotate('', (t[k2], Tj[k2] + 3.0), (t[k], Tj[k2] + 3.0), arrowprops=dict(arrowstyle='<->', lw=0.7, color=OK['verm']))
+    c_.text((t[k] + t[k2]) / 2, Tj[k2] + 3.6, '$t_{on}=1/(2f_e)$', color=OK['verm'], ha='center', va='bottom', fontsize=7)
+    c_.plot([t[k] - 0.1, t[k] + 1.3], [Tj[k]] * 2, color=OK['verm'], lw=0.6)
+    c_.text(t[k] + 1.4, Tj[k] - 0.5, '$T_{\\min}=\\bar T_j-r/2$', color=OK['verm'], va='center', fontsize=7)
+    c_.set_xlim(0, 12); c_.set_ylim(15, 85)
+    c_.set_xlabel('time after start (s)'); c_.set_ylabel('$T_j$ (°C)')
+    c_.legend(frameon=False, loc='upper right', fontsize=7)
+    c_.grid(alpha=.3, lw=0.4); label(c_, '(c)')
     save(fig, 5)
 
 
@@ -144,6 +159,76 @@ def fig_concept():
     save(fig, 6)
 
 
+def fig_pulse():
+    """Figure 12: junction temperature of the outer transistor T1 of Si-ANPC over one output period at a high output
+    frequency (baseline policy), carrier-averaged versus pulse-resolved model, with and without the microsecond term."""
+    import sys
+    sys.path.insert(0, HERE)
+    import tonhao as th, xung_policy as xp
+    th.use_sink(os.path.join(HERE, 'tannhiet_step.npz'))
+    cfg, I, m, c, fe = 'Si-ANPC', 462.0, 0.95, 0.95, 147.0
+    r = th.analyse_point(cfg, I, m, c, 1500, fe=fe); tp = r['tp']
+    fos = xp.fosters_of(tp)
+    rp, _, t, wp = xp.policy_ripple(tp, I, m, c, fe, r['Tb'], r['wb'], pulsed=True, fosters=fos, wave=True)
+    ra, _, _, wa = xp.policy_ripple(tp, I, m, c, fe, r['Tb'], r['wb'], pulsed=False, fosters=fos, wave=True)
+    k = list(tp['names']).index('T1')
+    per = int(round(1 / fe / (t[1] - t[0]))); j = 2
+    sl = slice(j * per, (j + 1) * per)
+    tt = (t[sl] - t[sl][0]) * 1e3
+    curves = ((wa[0][sl, k], OK['black'], '--', 1.2, f'carrier-averaged ({ra[0][k]:.1f} K)'),
+              (wp[1][sl, k], OK['blue'], '-', 1.0, f'pulse-resolved, no µs term ({rp[1][k]:.1f} K)'),
+              (wp[0][sl, k], OK['verm'], '-', 0.6, f'pulse-resolved, nominal ({rp[0][k]:.1f} K)'))
+    ref = wa[0][sl, k].mean()
+    fig, ax = plt.subplots(1, 2, figsize=(190 * MM, 60 * MM), gridspec_kw=dict(width_ratios=[1.6, 1]))
+    for y, col, ls, lw, lab in curves:
+        ax[0].plot(tt, y - ref, color=col, ls=ls, lw=lw, label=lab)
+    ax[0].set_xlim(0, tt[-1]); ax[0].set_xlabel('time in the output period (ms)')
+    ax[0].set_ylabel('junction temperature rise (K)')
+    ax[0].legend(frameon=False, loc='upper right', fontsize=7)
+    ax[0].grid(alpha=.3, lw=0.4); label(ax[0], '(a)')
+    # (b) zoom on two switching periods around the current maximum
+    y0 = wa[0][sl, k]; i_mx = int(np.argmax(y0)); half = int(round(1.0 / 1500 / (t[1] - t[0])))
+    zs = slice(max(i_mx - half, 0), min(i_mx + half, len(tt)))
+    for y, col, ls, lw, lab in curves:
+        ax[1].plot(tt[zs], (y - ref)[zs], color=col, ls=ls, lw=lw)
+    ax[1].set_xlim(tt[zs][0], tt[zs][-1]); ax[1].set_xlabel('time (ms), two switching periods')
+    ax[1].grid(alpha=.3, lw=0.4); label(ax[1], '(b)')
+    save(fig, 12)
+
+
+def fig_runaway():
+    """Figure 13: graphical construction of the runaway margin (Proposition 3) with the SiC values at maximum speed:
+    p_c = 125 W, c = 0.0052 1/K, L_c = 0.062 (Table C.3)."""
+    pc, cc, Lc = 125.0, 0.0052, 0.062
+    R = Lc / (pc * cc)                                   # K/W
+    x = np.linspace(0, 330, 600)
+    fig, a = plt.subplots(figsize=(90 * MM, 70 * MM))
+    a.plot(x, x / R, color=OK['black'], lw=1.2, label='heat removal $x/R$')
+    a.plot(x, pc * np.exp(cc * x), color=OK['blue'], lw=1.0, label='loss, rated: $p_c\\,e^{cx}$')
+    mu_e = 1 / (np.e * Lc)
+    a.plot(x, mu_e * pc * np.exp(cc * x), color=OK['verm'], lw=1.0, ls='--',
+           label=f'loss $\\times 1/(e\\mathcal{{L}}_c)$ = {mu_e:.1f}: tangent')
+    mu_l = 1 / Lc
+    a.plot(x, mu_l * pc * (1 + cc * x), color=OK['orange'], lw=1.0, ls='-.',
+           label=f'linear law $\\times 1/\\mathcal{{L}}_c$ = {mu_l:.0f}: parallel')
+    xe = 1 / cc
+    a.plot(xe, xe / R, 'o', color=OK['verm'], ms=4)
+    a.annotate('runaway\nthreshold', (xe, xe / R), (xe + 30, xe / R - 900), fontsize=7, color=OK['verm'],
+               arrowprops=dict(arrowstyle='->', lw=0.6, color=OK['verm']))
+    xs = x[np.argmin(np.abs(x / R - pc * np.exp(cc * x))[:200])]
+    a.plot(xs, xs / R, 'o', color=OK['blue'], ms=4)
+    a.annotate('operating\nequilibrium', (xs, xs / R), (xs + 45, xs / R + 900), fontsize=7, color=OK['blue'],
+               arrowprops=dict(arrowstyle='->', lw=0.6, color=OK['blue']))
+    a.set_xlim(0, 330); a.set_ylim(0, 3500)
+    a.set_xlabel('junction rise above coolant $x=T-T_w$ (K)'); a.set_ylabel('power (W)')
+    a.legend(frameon=False, loc='upper left', fontsize=6.5)
+    a.grid(alpha=.3, lw=0.4)
+    save(fig, 13)
+
+
 if __name__ == '__main__':
-    fig_damage()
-    fig_concept()
+    import sys
+    todo = sys.argv[1:] or ['5', '6', '12', '13']
+    for n, f_ in (('5', fig_damage), ('6', fig_concept), ('12', fig_pulse), ('13', fig_runaway)):
+        if n in todo:
+            f_()
