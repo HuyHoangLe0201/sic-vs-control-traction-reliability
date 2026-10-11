@@ -43,6 +43,14 @@ pip install -r requirements.txt
 Download `P4_code_histories.zip` from the release and extract it into `sim/`. Then, in `sim/`:
 
 ```bash
+python hinh_mach.py
+```
+
+```bash
+python hinh_coche.py
+```
+
+```bash
 python hinh_bai.py
 ```
 
@@ -54,7 +62,7 @@ python bang_allvar.py
 python so_lieu_bai.py
 ```
 
-Figures 1–9 (`Figure_N.pdf`, `.png`) and Tables C.3–C.4 (`appC_allvar.tex`) are written to `sim/out/` (or to the folder
+Figures 1–11 (`Figure_N.pdf`, `.png`) and Tables C.4–C.5 (`appC_allvar.tex`) are written to `sim/out/` (or to the folder
 given by the environment variable `P4_OUT`); `so_lieu_bai.md` lists the numbers quoted in the text. The other
 post-processing scripts (`p04_summary.py`, `phantich_p0.py`, `p11_rainflow.py`, `p12_system.py`, `mc_b10.py`,
 `sobol2.py`, `sobol3.py`, ...) regenerate the corresponding files in `sim/summaries/`.
@@ -68,7 +76,7 @@ The full chain, in order:
    `hoso_25km.csv` and, with low-frequency derating, `hoso_50km_dr.csv` and `hoso_50km_dr75.csv`.
 3. `python tannhiet.py`, `python tannhiet.py variants` and `python tannhiet.py par`: finite-volume heat-sink step
    responses `tannhiet_step*.npz`.
-4. `python tran_lp.py`: imbalance index over the operating-point grid (Fig. 3).
+4. `python tran_lp.py`: imbalance index over the operating-point grid (Fig. 7).
 5. `python chay_tatca.py`: mission simulations (calls `tran_daodong.py <cfg> <variant>`), writing `daodong_*.json` and
    `mophong_*.npz`; several hours on 7 cores. Without an argument it runs the base case, the derating, heat-sink,
    two-module and utilisation variants; the remaining variants are passed as a comma-separated list:
@@ -87,19 +95,21 @@ algebra libraries.
 | Paper | Script |
 |---|---|
 | Table 1, device models | `linhkien.py` |
-| Fig. 1, Fig. 2, mission | `hinh_bai.py`, `hoso_nhiemvu.py` |
-| Sec. 3.1–3.2, Theorem 1, Fig. 3 | `tonhao.py`, `tran_lp.py` |
-| Sec. 3.3–3.4, Proposition 1, ripple-aware law, Fig. 4 | `dao_dong.py`, `p15_bound.py` |
+| Figs. 1 and 3, drive, leg topologies and conduction paths | `hinh_mach.py` (schemdraw) |
+| Fig. 2, Fig. 4, mission | `hinh_bai.py`, `hoso_nhiemvu.py` |
+| Figs. 5 and 6, damage mechanism, ceiling and break-even concept | `hinh_coche.py` |
+| Sec. 3.1–3.2, Theorem 1, Fig. 7 | `tonhao.py`, `tran_lp.py` |
+| Sec. 3.3–3.4, Proposition 1, ripple-aware law, Fig. 8 | `dao_dong.py`, `p15_bound.py` |
 | Sec. 2.4, rainflow and CIPS08 | `tonthuong.py` |
-| Sec. 4, Table 2, Figs. 5–7 | `tran_daodong.py`, `hanhtrinh.py`, `so_lieu_bai.py`, `hinh_bai.py` |
+| Sec. 4, Table 2, Figs. 9–10 | `tran_daodong.py`, `hanhtrinh.py`, `so_lieu_bai.py`, `hinh_bai.py` |
 | Sec. 5.1, Table 3 | `xung_policy.py`, `p04_mission.py`, `p04_summary.py`, `xung_p04.py` |
 | Sec. 5.2, Table 4, superposed rainflow | `phantich_p0.py`, `p11_rainflow.py` |
-| Sec. 5.3, Table 5, Figs. 8–9 | `tran_daodong.py`, `hinh_f8.py`, `hinh_bai.py` |
+| Sec. 5.3, Table 5, Fig. 11 | `tran_daodong.py`, `hinh_f8.py`, `hinh_bai.py` |
 | Sec. 5.4, Sobol, Monte Carlo B10, series system | `sobol2.py`, `sobol3.py`, `mc_b10.py`, `p13_scaling.py`, `p12_system.py` |
-| Sec. 6.1, Table 6 | `bang_t2.py` |
+| Sec. 6.1, Table C.3 | `bang_t2.py` |
 | Sec. 6.2, baseplate solder | `phantich_p0.py` |
 | Appendix C, numerical checks | `p_round3.py`, `p_tmin_mission.py`, `p14_refine.py`, `p19_share.py`, `p_harm.py`, `xung_p04.py` |
-| Tables C.3–C.4 | `bang_allvar.py` |
+| Tables C.4–C.5 | `bang_allvar.py` |
 
 ## Licence
 

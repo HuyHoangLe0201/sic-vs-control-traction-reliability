@@ -1,5 +1,5 @@
 """Supplementary tables: all mission variants, one table per heating-time rule.
-python bang_allvar.py -> appC_allvar.tex (Tables C.3 and C.4) in the output folder"""
+python bang_allvar.py -> appC_allvar.tex (Tables C.4 and C.5) in the output folder"""
 import os, json
 
 HERE = os.path.dirname(os.path.abspath(__file__))

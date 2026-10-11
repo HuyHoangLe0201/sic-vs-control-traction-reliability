@@ -1,5 +1,5 @@
 """Publication figures for the MR manuscript (baseline variant fvdr), following the Elsevier artwork rules:
-vector PDF (fonts embedded), one file per figure (Figure_1 ... Figure_9), single column 90 mm / full width 190 mm,
+vector PDF (fonts embedded), one file per figure (Figures 2, 4, 7-11; Figures 1 and 3 from hinh_mach.py, 5 and 6 from hinh_coche.py), single column 90 mm / full width 190 mm,
 text of at least 7 pt, colour-blind-safe Okabe-Ito palette with redundant line styles and markers.
 
 python hinh_bai.py  -> Figure_N.pdf (+ .png at 1000 dpi) in the output folder
@@ -26,7 +26,7 @@ plt.rcParams.update({'font.size': 8, 'axes.labelsize': 8, 'legend.fontsize': 7, 
                      'figure.constrained_layout.use': True})   # exact Elsevier widths, no cropping
 
 
-FIGNO = {'M': 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8, 8: 9}   # internal id -> number in the manuscript
+FIGNO = {'M': 2, 1: 4, 2: 7, 3: 8, 4: 9, 5: 10, 8: 11}   # internal id -> figure number (1, 3: hinh_mach.py; 5, 6: hinh_coche.py; code figures 6, 7 unused)
 
 
 def save(fig, n):
@@ -45,25 +45,25 @@ def figM():
     """Model chain (a) and redundancy of the three-level leg: feasible offset band and the five offset levels (b)."""
     from matplotlib.patches import FancyBboxPatch
     fig, ax = plt.subplots(1, 2, figsize=(W2, 62 * MM), gridspec_kw=dict(width_ratios=[1.25, 1]))
-    a = ax[0]; a.set_xlim(0, 10); a.set_ylim(0, 10); a.axis('off')
+    a = ax[0]; a.set_xlim(0, 10); a.set_ylim(0, 10.4); a.axis('off')
     boxes = [(0.2, 8.1, 'Train model\n& derating', 'mission $I_{pk},m,\\cos\\varphi,f_e$'),
-             (0.2, 5.6, 'Loss tables\n(PWM, offset, path)', 'chip losses vs angle'),
-             (0.2, 3.1, 'Policy $\\mathbf{x}$ (LP)\nbaseline / laws', 'time shares per bin'),
-             (5.2, 8.1, 'Foster + FV heat sink\n(electro-thermal)', '$\\bar T_j(t)$, ripple $r(t)$'),
+             (0.2, 5.6, 'Loss tables\n(modulation, offset, path)', 'chip losses vs angle'),
+             (0.2, 3.1, 'Policy $\\mathbf{x}$ (linear program)\nbaseline / laws', 'time shares per bin'),
+             (5.2, 8.1, 'Foster + finite-volume\nheat sink (electro-thermal)', '$\\bar T_j(t)$, ripple $r(t)$'),
              (5.2, 5.6, 'Rainflow + CIPS08\n(two $t_{on}$ rules)', 'damage per run'),
-             (5.2, 3.1, 'Break-even $\\bar\\kappa$\nMC / Sobol', 'SiC vs Si'),
-             (2.7, 0.4, 'Bounds: mean temperature $T^*$ and ripple LP', '')]
+             (5.2, 3.1, 'Break-even $\\bar\\kappa$\nMonte Carlo, Sobol', 'SiC vs Si'),
+             (2.7, 0.4, 'Linear-program bounds\nmean temperature $T^*$ and ripple', '')]
     for x, y, t, s in boxes:
         w = 4.4 if x < 5 or x > 5 else 4.4
         if y < 1:
             w = 6.8
-        a.add_patch(FancyBboxPatch((x, y), w, 1.6, boxstyle='round,pad=0.05', fc='#F2F2F2', ec=OK['grey'], lw=0.6))
-        a.text(x + w / 2, y + 1.05, t, ha='center', va='center', fontsize=7)
+        a.add_patch(FancyBboxPatch((x, y), w, 1.9, boxstyle='round,pad=0.05', fc='#F2F2F2', ec=OK['grey'], lw=0.6))
+        a.text(x + w / 2, y + (1.3 if s else 0.95), t, ha='center', va='center', fontsize=7)
         if s:
             a.text(x + w / 2, y + 0.3, s, ha='center', va='center', fontsize=7, color=OK['blue'])
     arr = dict(arrowstyle='->', lw=0.7, color=OK['black'])
-    for (x0, y0), (x1, y1) in [((2.4, 8.1), (2.4, 7.3)), ((2.4, 5.6), (2.4, 4.8)), ((4.65, 3.9), (5.2, 8.6)),
-                               ((7.4, 8.1), (7.4, 7.3)), ((7.4, 5.6), (7.4, 4.8)), ((2.4, 3.1), (4.0, 2.05))]:
+    for (x0, y0), (x1, y1) in [((2.4, 8.1), (2.4, 7.55)), ((2.4, 5.6), (2.4, 5.05)), ((4.65, 3.9), (5.2, 8.9)),
+                               ((7.4, 8.1), (7.4, 7.55)), ((7.4, 5.6), (7.4, 5.05)), ((2.4, 3.1), (4.0, 2.35))]:
         a.annotate('', (x1, y1), (x0, y0), arrowprops=arr)
     label(a, '(a)')
     b = ax[1]
@@ -326,5 +326,5 @@ def figGA():
 
 if __name__ == '__main__':
     import sys
-    for n in (sys.argv[1:] or ['M', '1', '2', '3', '4', '5', '6', '7', '8']):
+    for n in (sys.argv[1:] or ['M', '1', '2', '3', '4', '5', '8']):
         globals()[f'fig{n}']()
