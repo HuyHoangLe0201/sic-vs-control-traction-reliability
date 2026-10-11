@@ -5,7 +5,7 @@
   band shares 0.5-2 Hz: 0.04, 2-5 Hz: 0.09, 5-10 Hz: 0.22, 10-30 Hz: 0.38, 30-100 Hz: 0.20, 100-300 Hz: 0.00, LF: 0.07
 - har: worst chip D1, D = 1.14e-06 (t_on free 5.45e-07), ripple share 0.60 (free 0.16), max ripple 16.1 K, Tj peak 76.6 C, max mean-Tj rise above water 36.6 K, case swing max 18.0 K, solder rel 840
   band shares 0.5-2 Hz: 0.00, 2-5 Hz: 0.02, 5-10 Hz: 0.06, 10-30 Hz: 0.11, 30-100 Hz: 0.05, 100-300 Hz: 0.36, LF: 0.40
-- bound ton_clip: D_bound = 1.82e-07, best candidate pair_D1D4; ceiling = 71.4x, har gain = 11.4x, ha gain = 5.49x, har D_rip >= bound: True
+- bound ton_clip: D_bound = 1.81e-07, best candidate pair_D1D4; ceiling = 71.4x, har gain = 11.4x, ha gain = 5.49x, har D_rip >= bound: True
 - bound ton_free: D_bound = 2.59e-08, best candidate dual1; ceiling = 150x, har gain = 7.12x, ha gain = 5.56x, har D_rip >= bound: True
 - operating points: 194
 ## Si-ANPC
@@ -25,6 +25,6 @@
   band shares 0.5-2 Hz: 0.00, 2-5 Hz: 0.00, 5-10 Hz: 0.00, 10-30 Hz: 0.00, 30-100 Hz: 0.04, 100-300 Hz: 0.90, LF: 0.05
 - har: worst chip S2, D = 2.53e-07 (t_on free 3.45e-08), ripple share 0.93 (free 0.45), max ripple 4.5 K, Tj peak 57.8 C, max mean-Tj rise above water 17.8 K, case swing max 9.8 K, solder rel 189
   band shares 0.5-2 Hz: 0.00, 2-5 Hz: 0.00, 5-10 Hz: 0.00, 10-30 Hz: 0.00, 30-100 Hz: 0.03, 100-300 Hz: 0.90, LF: 0.07
-- bound ton_clip: D_bound = 7.5e-08, best candidate dual1; ceiling = 13.3x, har gain = 3.94x, ha gain = 3.48x, har D_rip >= bound: True
+- bound ton_clip: D_bound = 7.49e-08, best candidate dual1; ceiling = 13.3x, har gain = 3.94x, ha gain = 3.48x, har D_rip >= bound: True
 - bound ton_free: D_bound = 5.03e-09, best candidate dual1; ceiling = 31.9x, har gain = 4.66x, ha gain = 4.75x, har D_rip >= bound: True
 - operating points: 194

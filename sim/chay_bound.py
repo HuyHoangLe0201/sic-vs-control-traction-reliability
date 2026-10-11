@@ -11,7 +11,8 @@ CFGS = ['SiC-ANPC', 'Si-ANPC', 'Si-NPC']
 
 def done(v, c):
     j = json.load(open(os.path.join(HERE, f'daodong_{v}_{c}.json')))
-    return 'bounds_tw' in j and j.get('bound_version') != 'tw-mid'
+    # done when the bound with the convex minorant of the cut-off damage (review MC1) is present
+    return 'bounds_tw' in j and 'D_bound_rip_cut' in j['bounds_tw']['ton_clip']
 
 
 jobs = []

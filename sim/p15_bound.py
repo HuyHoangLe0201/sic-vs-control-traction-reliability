@@ -47,9 +47,16 @@ def main(cfg, variant):
     bounds = {}
     for st in ('ton_clip', 'ton_free'):
         f_nf = donhay.nf_setting(st)
-        cand = {nm: float(np.sum(np.where(rho >= tt.DT_MIN, n / f_nf(np.maximum(rho, 1e-9), Tw, 1.0 / (2 * fe[steps])), 0)))
+        ton = 1.0 / (2 * fe[steps])
+        # previous evaluation with the cut-off damage d_c(rho) (not convex; kept for comparison)
+        cand_cut = {nm: float(np.sum(np.where(rho >= tt.DT_MIN, n / f_nf(np.maximum(rho, 1e-9), Tw, ton), 0)))
+                    for nm, rho in rhos.items()}
+        # review MC1: convex minorant h(r) = max(0, d(r) - d(0.5 K)) <= d_c(r), so the bound is valid for the cut-off model
+        d05 = n / f_nf(np.full(len(steps), tt.DT_MIN), Tw, ton)
+        cand = {nm: float(np.sum(np.maximum(0.0, n / f_nf(np.maximum(rho, 1e-9), Tw, ton) - d05)))
                 for nm, rho in rhos.items()}
-        bounds[st] = dict(candidates=cand, D_bound_rip=max(cand.values()))
+        bounds[st] = dict(candidates=cand, D_bound_rip=max(cand.values()),
+                          candidates_cut=cand_cut, D_bound_rip_cut=max(cand_cut.values()))
     fn = os.path.join(HERE, f'daodong_{variant}_{cfg}.json')
     j = json.load(open(fn))
     j['bounds_tb'] = j.get('bounds_tb', j['bounds'])

@@ -2,8 +2,7 @@
 
 Simulation code and result files for the paper
 
-> *Junction-level damage ceilings of redundant-state thermal control and break-even power-cycling capability of SiC in
-> three-level traction inverters*, submitted to Microelectronics Reliability.
+> *Redundant-state thermal control versus SiC: damage ceilings and break-even capability in traction inverters*, submitted to Microelectronics Reliability.
 
 The study compares, for a 650 kW three-level traction inverter on a high-speed mission, loss redistribution through
 redundant switching states (Si NPC and ANPC legs) with the substitution of Si IGBTs by SiC MOSFETs (SiC ANPC leg). All
@@ -110,6 +109,7 @@ algebra libraries.
 | Sec. 6.1, Table C.3 | `bang_t2.py` |
 | Sec. 6.2, baseplate solder | `phantich_p0.py` |
 | Appendix C, numerical checks | `p_round3.py`, `p_tmin_mission.py`, `p14_refine.py`, `p19_share.py`, `p_harm.py`, `xung_p04.py` |
+| Appendix C, cut-off of the damage model in the ripple bound; amplitude correction versus rainflow of the pulse-resolved history | `p_cutoff.py`, `p_floor_check.py`, `p_mc3.py` |
 | Supplementary Tables S1–S2 | `bang_allvar.py` |
 
 ## Licence
