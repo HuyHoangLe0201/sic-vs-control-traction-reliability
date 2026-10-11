@@ -1,5 +1,5 @@
 """Supplementary tables: all mission variants, one table per heating-time rule.
-python bang_allvar.py -> appC_allvar.tex (Tables C.4 and C.5) in the output folder"""
+python bang_allvar.py -> appC_allvar.tex (Tables S1 and S2 of the Supplementary material)"""
 import os, json
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -21,7 +21,7 @@ def table(st, rule, label, extra=''):
         ce = [f"{D(c, 'base') / J[v][c]['bounds_tw'][st]['D_bound_rip']:.0f}" for c in C]
         ga = [f"{D(c, 'base') / D(c, 'har'):.1f}" for c in C]
         rows.append(lab + ' & ' + ' & '.join(sh + ce + ga) + r' \\')
-    return r'''\begin{table}[p]
+    return r'''\begin{table}[!htbp]
 \centering
 \caption{All variants, ''' + rule + r''' rule: ripple share, ceiling and reduction by the ripple-aware law.}
 \label{''' + label + r'''}

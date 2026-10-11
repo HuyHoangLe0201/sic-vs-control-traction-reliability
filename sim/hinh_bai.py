@@ -105,7 +105,7 @@ def fig2():
     for line in open(os.path.join(HERE, 'tran_lp.csv')).read().splitlines()[1:]:
         p = line.split(',')
         rows.append(dict(cfg=p[0], mode=p[1], I=float(p[2]), m=float(p[3]), eta=float(p[9])))
-    fig, ax = plt.subplots(2, 3, figsize=(W2, 85 * MM), sharex=True, sharey=True)
+    fig, ax = plt.subplots(2, 3, figsize=(W2, 72 * MM), sharex=True, sharey=True)
     styles = {200: (OK['sky'], 'o', ':'), 300: (OK['blue'], 's', '--'), 462: (OK['verm'], '^', '-'), 600: (OK['black'], 'D', '-.')}
     for j, cfg in enumerate(('Si-NPC', 'Si-ANPC', 'SiC-ANPC')):
         for i, mode in enumerate(('motor', 'brake')):
@@ -157,7 +157,7 @@ def worst(d, tag):
 
 
 def fig4():
-    fig, axes = plt.subplots(3, 1, figsize=(W2, 120 * MM), sharex=True)
+    fig, axes = plt.subplots(3, 1, figsize=(W2, 96 * MM), sharex=True)
     for ax, cfg, lab in zip(axes, ('Si-NPC', 'Si-ANPC', 'SiC-ANPC'), ('(a)', '(b)', '(c)')):
         d = load(cfg)
         for tag in ('base', 'ha', 'har'):

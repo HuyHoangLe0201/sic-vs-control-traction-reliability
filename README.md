@@ -62,7 +62,7 @@ python bang_allvar.py
 python so_lieu_bai.py
 ```
 
-Figures 1–12 (`Figure_N.pdf`, `.png`) and Tables C.4–C.5 (`appC_allvar.tex`) are written to `sim/out/` (or to the folder
+Figures 1–12 (`Figure_N.pdf`, `.png`) and Tables S1–S2 of the Supplementary material (`appC_allvar.tex`) are written to `sim/out/` (or to the folder
 given by the environment variable `P4_OUT`); `so_lieu_bai.md` lists the numbers quoted in the text. The other
 post-processing scripts (`p04_summary.py`, `phantich_p0.py`, `p11_rainflow.py`, `p12_system.py`, `mc_b10.py`,
 `sobol2.py`, `sobol3.py`, ...) regenerate the corresponding files in `sim/summaries/`.
@@ -110,7 +110,7 @@ algebra libraries.
 | Sec. 6.1, Table C.3 | `bang_t2.py` |
 | Sec. 6.2, baseplate solder | `phantich_p0.py` |
 | Appendix C, numerical checks | `p_round3.py`, `p_tmin_mission.py`, `p14_refine.py`, `p19_share.py`, `p_harm.py`, `xung_p04.py` |
-| Tables C.4–C.5 | `bang_allvar.py` |
+| Supplementary Tables S1–S2 | `bang_allvar.py` |
 
 ## Licence
 
