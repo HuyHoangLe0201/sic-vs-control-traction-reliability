@@ -201,7 +201,10 @@ def fig_runaway():
     read from bang_t2.md (output of bang_t2.py): single-chip lower bound 1/(e L_c), value 1/L_c for a linear loss
     increase, and linear-stability margin 1/rho(Z K) including the thermal coupling between chips."""
     rows = {}
-    for line in open(os.path.join(HERE, 'bang_t2.md'), encoding='utf-8'):
+    src = os.path.join(HERE, 'bang_t2.md')
+    if not os.path.exists(src):                          # layout of the published package
+        src = os.path.join(HERE, 'summaries', 'bang_t2.md')
+    for line in open(src, encoding='utf-8'):
         f = [x.strip() for x in line.strip().strip('|').split('|')]
         if len(f) > 10 and f[0] in ('Si-NPC', 'Si-ANPC', 'SiC-ANPC'):
             rows[(f[0], f[1])] = (float(f[7]), float(f[8]), float(f[10]))
