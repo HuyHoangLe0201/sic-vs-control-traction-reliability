@@ -1,5 +1,5 @@
 """Publication figures for the MR manuscript (baseline variant fvdr), following the Elsevier artwork rules:
-vector PDF (fonts embedded), one file per figure (Figures 2, 4, 7-10; Figures 1 and 3 from hinh_mach.py, 5, 6, 11, 12 from hinh_coche.py), single column 90 mm / full width 190 mm,
+vector PDF (fonts embedded), one file per figure (Figures 2, 4, 7-9 and Supplementary Figure S1; Figures 1 and 3 from hinh_mach.py, 5, 6, 10, 11 from hinh_coche.py), single column 90 mm / full width 190 mm,
 text of at least 7 pt, colour-blind-safe Okabe-Ito palette with redundant line styles and markers.
 
 python hinh_bai.py  -> Figure_N.pdf (+ .png at 1000 dpi) in the output folder
@@ -26,7 +26,7 @@ plt.rcParams.update({'font.size': 8, 'axes.labelsize': 8, 'legend.fontsize': 7, 
                      'figure.constrained_layout.use': True})   # exact Elsevier widths, no cropping
 
 
-FIGNO = {'M': 2, 1: 4, 2: 7, 4: 8, 5: 9, 8: 10}   # internal id -> figure number (1, 3: hinh_mach.py; 5, 6, 11, 12: hinh_coche.py; code figures 3, 6, 7 unused)
+FIGNO = {'M': 2, 1: 4, 2: 'S1', 4: 7, 5: 8, 8: 9}   # internal id -> figure number (1, 3: hinh_mach.py; 5, 6, 10, 11: hinh_coche.py; S1: Supplementary; code figures 3, 6, 7 unused)
 
 
 def save(fig, n):

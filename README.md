@@ -17,7 +17,7 @@ results are obtained by simulation.
 | `sim/p04m_*.json`, `sim/ptmin_*.json` | Pulse-resolved correction (Section 5.2) and true-minimum check (Supplementary Section S4) |
 | `sim/hoso_*.csv` | Mission profiles (0.1 s step) |
 | `sim/tannhiet_step*.npz`, `sim/tannhiet.json` | Step responses of the finite-volume heat-sink model |
-| `sim/tran_lp*.csv` | Redistributable-imbalance index over the operating-point grid (Fig. 7) |
+| `sim/tran_lp*.csv` | Redistributable-imbalance index over the operating-point grid (Supplementary Fig. S1) |
 | `sim/summaries/*.md` | Outputs of the post-processing scripts as used in the paper |
 | Release asset `P4_code_histories.zip` | Simulated junction-temperature histories `mophong_<variant>_<cfg>.npz` (57 files, about 200 MB), needed by the post-processing scripts |
 
@@ -61,7 +61,7 @@ python bang_allvar.py
 python so_lieu_bai.py
 ```
 
-Figures 1–12 (`Figure_N.pdf`, `.png`) and Tables S1–S2 of the Supplementary material (`appC_allvar.tex`) are written to `sim/out/` (or to the folder
+Figures 1–11 and Supplementary Figure S1 (`Figure_N.pdf`, `.png`) and Tables S1–S2 of the Supplementary material (`appC_allvar.tex`) are written to `sim/out/` (or to the folder
 given by the environment variable `P4_OUT`); `so_lieu_bai.md` lists the numbers quoted in the text. The other
 post-processing scripts (`p04_summary.py`, `phantich_p0.py`, `p11_rainflow.py`, `p12_system.py`, `mc_b10.py`,
 `sobol2.py`, `sobol3.py`, ...) regenerate the corresponding files in `sim/summaries/`.
@@ -75,7 +75,7 @@ The full chain, in order:
    `hoso_25km.csv` and, with low-frequency derating, `hoso_50km_dr.csv` and `hoso_50km_dr75.csv`.
 3. `python tannhiet.py`, `python tannhiet.py variants` and `python tannhiet.py par`: finite-volume heat-sink step
    responses `tannhiet_step*.npz`.
-4. `python tran_lp.py`: imbalance index over the operating-point grid (Fig. 7).
+4. `python tran_lp.py`: imbalance index over the operating-point grid (Supplementary Fig. S1).
 5. `python chay_tatca.py`: mission simulations (calls `tran_daodong.py <cfg> <variant>`), writing `daodong_*.json` and
    `mophong_*.npz`; several hours on 7 cores. Without an argument it runs the base case, the derating, heat-sink,
    two-module and utilisation variants; the remaining variants are passed as a comma-separated list:
@@ -96,16 +96,16 @@ algebra libraries.
 | Table 1, device models | `linhkien.py` |
 | Figs. 1 and 3, drive, leg topologies and conduction paths | `hinh_mach.py` (schemdraw) |
 | Fig. 2, Fig. 4, mission | `hinh_bai.py`, `hoso_nhiemvu.py` |
-| Figs. 5, 6 and 12, damage mechanism, ceiling and break-even concept, runaway margins | `hinh_coche.py` (Fig. 12 from `bang_t2.md`) |
-| Fig. 11, switching-period excursions | `hinh_coche.py` with `xung_policy.py` |
-| Sec. 3.1–3.2, Theorem 1, Fig. 7 | `tonhao.py`, `tran_lp.py` |
+| Figs. 5, 6 and 11, damage mechanism, ceiling and break-even concept, runaway margins | `hinh_coche.py` (Fig. 11 from `bang_t2.md`) |
+| Fig. 10, switching-period excursions | `hinh_coche.py` with `xung_policy.py` |
+| Sec. 3.1–3.2, Theorem 1 (Appendix A), Supplementary Fig. S1 | `tonhao.py`, `tran_lp.py` |
 | Sec. 3.3–3.4, Proposition 1, ripple-aware law | `dao_dong.py`, `p15_bound.py` |
 | Sec. 2.4, rainflow and CIPS08 | `tonthuong.py` |
-| Sec. 4, Table 2, Figs. 8–9 | `tran_daodong.py`, `hanhtrinh.py`, `so_lieu_bai.py`, `hinh_bai.py` |
+| Sec. 4, Table 2, Figs. 7–8 | `tran_daodong.py`, `hanhtrinh.py`, `so_lieu_bai.py`, `hinh_bai.py` |
 | Sec. 5.2, Table 4 | `xung_policy.py`, `p04_mission.py`, `p04_summary.py`, `xung_p04.py` |
 | Sec. 5.3, Table 5, superposed rainflow | `phantich_p0.py`, `p11_rainflow.py` |
-| Sec. 5.1, Table 3, Fig. 10 | `tran_daodong.py`, `hinh_f8.py`, `hinh_bai.py` |
-| Sec. 5.4, Sobol, Monte Carlo B10, series system | `sobol2.py`, `sobol3.py`, `mc_b10.py`, `p13_scaling.py`, `p12_system.py` |
+| Sec. 5.1, Table 3, Fig. 9 | `tran_daodong.py`, `hinh_f8.py`, `hinh_bai.py` |
+| Sec. 5.4 and Supplementary Section S6, Sobol, Monte Carlo B10, series system | `sobol2.py`, `sobol3.py`, `mc_b10.py`, `p13_scaling.py`, `p12_system.py` |
 | Sec. 6.1, Supplementary Table S3 | `bang_t2.py` |
 | Sec. 6.2, baseplate solder | `phantich_p0.py` |
 | Supplementary Section S4, numerical checks | `p_round3.py`, `p_tmin_mission.py`, `p14_refine.py`, `p19_share.py`, `p_harm.py`, `xung_p04.py` |

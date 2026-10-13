@@ -1,6 +1,6 @@
 """Mechanism figures of the manuscript.
 Figure 5: why the output-frequency ripple is large at low output frequency (Foster low-pass, Si IGBT network of
-Table C.1) and how a temperature history is split into slow and ripple cycles (schematic).
+Table B.1) and how a temperature history is split into slow and ripple cycles (schematic).
 Figure 6: idea of the ceiling (every law is a point of the policy polytope; the linear program finds the best one,
 schematic) and the break-even capability with the base-case damages of Section 4.3.
 python hinh_coche.py -> Figure_5 and Figure_6 (.pdf, .png) in the output folder"""
@@ -18,10 +18,10 @@ OK = dict(black='#000000', orange='#E69F00', sky='#56B4E9', green='#009E73', blu
 plt.rcParams.update({'font.size': 8, 'axes.labelsize': 8, 'legend.fontsize': 7, 'xtick.labelsize': 7,
                      'ytick.labelsize': 7, 'axes.linewidth': 0.6, 'lines.linewidth': 1.0, 'pdf.fonttype': 42,
                      'ps.fonttype': 42, 'savefig.bbox': 'standard', 'figure.constrained_layout.use': True})
-# normalised Foster network of the Si IGBT (Table C.1)
+# normalised Foster network of the Si IGBT (Table B.1)
 A_SI = np.array([0.0124, 0.0739, 0.3505, 0.5632])
 TAU_SI = np.array([0.0196, 1.40, 17.9, 94.4]) * 1e-3
-# normalised Foster network of the SiC MOSFET (Table C.1)
+# normalised Foster network of the SiC MOSFET (Table B.1)
 A_SIC = np.array([0.0213, 0.0732, 0.233, 0.665])
 TAU_SIC = np.array([0.0151, 0.457, 6.19, 34.5]) * 1e-3
 
@@ -53,7 +53,7 @@ def fig_damage():
     th = np.linspace(0, 2 * np.pi, 720, endpoint=False)
     p = np.clip(np.sin(th), 0, None) ** 2          # conduction-dominated loss of one chip: one half-period per cycle
     fig, ax = plt.subplots(1, 3, figsize=(190 * MM, 62 * MM), gridspec_kw=dict(width_ratios=[1, 1, 1.15]))
-    # (a) thermal impedance seen by a loss harmonic of frequency f (Table 1 resistances, Table C.1 Foster networks)
+    # (a) thermal impedance seen by a loss harmonic of frequency f (Table 1 resistances, Table B.1 Foster networks)
     a = ax[0]
     f = np.logspace(-1, 3, 400)
     for R, aa, tt, lab, c, ls in ((53, A_SI, TAU_SI, 'Si IGBT', OK['blue'], '-'), (81, A_SI, TAU_SI, 'Si FWD', OK['sky'], '--'),
@@ -160,7 +160,7 @@ def fig_concept():
 
 
 def fig_pulse():
-    """Figure 11: junction temperature of the outer transistor T1 of Si-ANPC over one output period at a high output
+    """Figure 10: junction temperature of the outer transistor T1 of Si-ANPC over one output period at a high output
     frequency (baseline policy), carrier-averaged versus pulse-resolved model, with and without the microsecond term."""
     import sys
     sys.path.insert(0, HERE)
@@ -193,11 +193,11 @@ def fig_pulse():
         ax[1].plot(tt[zs], (y - ref)[zs], color=col, ls=ls, lw=lw)
     ax[1].set_xlim(tt[zs][0], tt[zs][-1]); ax[1].set_xlabel('time (ms), two switching periods')
     ax[1].grid(alpha=.3, lw=0.4); label(ax[1], '(b)')
-    save(fig, 11)
+    save(fig, 10)
 
 
 def fig_runaway():
-    """Figure 12: runaway load margins of the hottest chip (baseline policy) for the operating points of Table C.3,
+    """Figure 11: runaway load margins of the hottest chip (baseline policy) for the operating points of Table S3,
     read from bang_t2.md (output of bang_t2.py): single-chip lower bound 1/(e L_c), value 1/L_c for a linear loss
     increase, and linear-stability margin 1/rho(Z K) including the thermal coupling between chips."""
     rows = {}
@@ -243,12 +243,12 @@ def fig_runaway():
           Line2D([], [], ls='', marker='D', color=OK['grey'], ms=4, label='with thermal coupling $1/\\varrho(\\mathbf{ZK})$'),
           Line2D([], [], ls='', marker='o', mfc='white', mec=OK['grey'], ms=5, label='linear loss growth $1/\\mathcal{L}_c$')]
     ax.legend(handles=hd, frameon=False, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=3, fontsize=7)
-    save(fig, 12)
+    save(fig, 11)
 
 
 if __name__ == '__main__':
     import sys
-    todo = sys.argv[1:] or ['5', '6', '11', '12']
-    for n, f_ in (('5', fig_damage), ('6', fig_concept), ('11', fig_pulse), ('12', fig_runaway)):
+    todo = sys.argv[1:] or ['5', '6', '10', '11']
+    for n, f_ in (('5', fig_damage), ('6', fig_concept), ('10', fig_pulse), ('11', fig_runaway)):
         if n in todo:
             f_()
