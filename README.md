@@ -103,6 +103,7 @@ algebra libraries.
 | Sec. 2.4, rainflow and CIPS08 | `tonthuong.py` |
 | Sec. 4, Table 2, Figs. 7–8 | `tran_daodong.py`, `hanhtrinh.py`, `so_lieu_bai.py`, `hinh_bai.py` |
 | Sec. 5.2, Table 4 | `xung_policy.py`, `p04_mission.py`, `p04_summary.py`, `xung_p04.py` |
+| Sec. 5.2, pulse-resolved model in every design variant, Table E.4 | `chay_p04m_var.py`, `p04_var_summary.py`, `bang_pulsevar.py` |
 | Sec. 5.3, Table 5, superposed rainflow | `phantich_p0.py`, `p11_rainflow.py` |
 | Sec. 5.1, Table 3, Fig. 9 | `tran_daodong.py`, `hinh_f8.py`, `hinh_bai.py` |
 | Sec. 5.4 and Appendix E, Sobol, Monte Carlo B10, series system | `sobol2.py`, `sobol3.py`, `mc_b10.py`, `p13_scaling.py`, `p12_system.py` |
