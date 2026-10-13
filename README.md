@@ -14,10 +14,10 @@ results are obtained by simulation.
 |---|---|
 | `sim/*.py` | Models, simulation drivers, post-processing, figures and tables (Python, flat layout; every script reads and writes in its own folder) |
 | `sim/daodong_<variant>_<cfg>.json` | Mission results per variant and configuration: damage under the three policies, both heating-time rules, damage floor and ceiling |
-| `sim/p04m_*.json`, `sim/ptmin_*.json` | Pulse-resolved correction (Section 5.1) and true-minimum check (Appendix C) |
+| `sim/p04m_*.json`, `sim/ptmin_*.json` | Pulse-resolved correction (Section 5.2) and true-minimum check (Supplementary Section S4) |
 | `sim/hoso_*.csv` | Mission profiles (0.1 s step) |
 | `sim/tannhiet_step*.npz`, `sim/tannhiet.json` | Step responses of the finite-volume heat-sink model |
-| `sim/tran_lp*.csv` | Redistributable-imbalance index over the operating-point grid (Fig. 3) |
+| `sim/tran_lp*.csv` | Redistributable-imbalance index over the operating-point grid (Fig. 7) |
 | `sim/summaries/*.md` | Outputs of the post-processing scripts as used in the paper |
 | Release asset `P4_code_histories.zip` | Simulated junction-temperature histories `mophong_<variant>_<cfg>.npz` (57 files, about 200 MB), needed by the post-processing scripts |
 
@@ -106,10 +106,10 @@ algebra libraries.
 | Sec. 5.3, Table 5, superposed rainflow | `phantich_p0.py`, `p11_rainflow.py` |
 | Sec. 5.1, Table 3, Fig. 10 | `tran_daodong.py`, `hinh_f8.py`, `hinh_bai.py` |
 | Sec. 5.4, Sobol, Monte Carlo B10, series system | `sobol2.py`, `sobol3.py`, `mc_b10.py`, `p13_scaling.py`, `p12_system.py` |
-| Sec. 6.1, Table C.3 | `bang_t2.py` |
+| Sec. 6.1, Supplementary Table S3 | `bang_t2.py` |
 | Sec. 6.2, baseplate solder | `phantich_p0.py` |
-| Appendix C, numerical checks | `p_round3.py`, `p_tmin_mission.py`, `p14_refine.py`, `p19_share.py`, `p_harm.py`, `xung_p04.py` |
-| Appendix C, cut-off of the damage model in the ripple bound; amplitude correction versus rainflow of the pulse-resolved history | `p_cutoff.py`, `p_floor_check.py`, `p_mc3.py` |
+| Supplementary Section S4, numerical checks | `p_round3.py`, `p_tmin_mission.py`, `p14_refine.py`, `p19_share.py`, `p_harm.py`, `xung_p04.py` |
+| Supplementary Section S4, cut-off of the damage model in the ripple bound; amplitude correction versus rainflow of the pulse-resolved history | `p_cutoff.py`, `p_floor_check.py`, `p_mc3.py` |
 | Supplementary Tables S1–S2 | `bang_allvar.py` |
 
 ## Licence
