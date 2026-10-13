@@ -197,7 +197,7 @@ def fig_pulse():
 
 
 def fig_runaway():
-    """Figure 11: runaway load margins of the hottest chip (baseline policy) for the operating points of Table S3,
+    """Figure 11: runaway load margins of the hottest chip (baseline policy) for the operating points of Table E.3,
     read from bang_t2.md (output of bang_t2.py): single-chip lower bound 1/(e L_c), value 1/L_c for a linear loss
     increase, and linear-stability margin 1/rho(Z K) including the thermal coupling between chips."""
     rows = {}

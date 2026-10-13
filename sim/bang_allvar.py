@@ -1,5 +1,5 @@
-"""Supplementary tables: all mission variants, one table per heating-time rule.
-python bang_allvar.py -> appC_allvar.tex (Tables S1 and S2 of the Supplementary material)"""
+"""Appendix E tables: all mission variants, one table per heating-time rule.
+python bang_allvar.py -> appC_allvar.tex (Tables E.1 and E.2 of the manuscript)"""
 import os, json
 
 HERE = os.path.dirname(os.path.abspath(__file__))
