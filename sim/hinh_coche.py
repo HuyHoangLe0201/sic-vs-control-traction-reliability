@@ -197,7 +197,7 @@ def fig_pulse():
 
 
 def fig_runaway():
-    """Figure 11: runaway load margins of the hottest chip (baseline policy) for the operating points of Table E.3,
+    """Figure E.1: runaway load margins of the hottest chip (baseline policy) for the operating points of Table E.3,
     read from bang_t2.md (output of bang_t2.py): single-chip lower bound 1/(e L_c), value 1/L_c for a linear loss
     increase, and linear-stability margin 1/rho(Z K) including the thermal coupling between chips."""
     rows = {}
@@ -243,12 +243,12 @@ def fig_runaway():
           Line2D([], [], ls='', marker='D', color=OK['grey'], ms=4, label='with thermal coupling $1/\\varrho(\\mathbf{ZK})$'),
           Line2D([], [], ls='', marker='o', mfc='white', mec=OK['grey'], ms=5, label='linear loss growth $1/\\mathcal{L}_c$')]
     ax.legend(handles=hd, frameon=False, loc='lower center', bbox_to_anchor=(0.5, 1.0), ncol=3, fontsize=7)
-    save(fig, 11)
+    save(fig, 'E1')
 
 
 if __name__ == '__main__':
     import sys
-    todo = sys.argv[1:] or ['5', '6', '10', '11']
-    for n, f_ in (('5', fig_damage), ('6', fig_concept), ('10', fig_pulse), ('11', fig_runaway)):
+    todo = sys.argv[1:] or ['5', '6', '10', 'E1']
+    for n, f_ in (('5', fig_damage), ('6', fig_concept), ('10', fig_pulse), ('E1', fig_runaway)):
         if n in todo:
             f_()
