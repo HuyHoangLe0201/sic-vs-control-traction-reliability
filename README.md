@@ -2,7 +2,7 @@
 
 Simulation code and result files for the paper
 
-> *Redundant-state thermal control versus SiC: damage ceilings and break-even capability in traction inverters*, submitted to Microelectronics Reliability.
+> *Thermal control versus silicon carbide for extending power-module lifetime in railway traction inverters*, submitted to Microelectronics Reliability.
 
 The study compares, for a 650 kW three-level traction inverter on a high-speed mission, loss redistribution through
 redundant switching states (Si NPC and ANPC legs) with the substitution of Si IGBTs by SiC MOSFETs (SiC ANPC leg). All
