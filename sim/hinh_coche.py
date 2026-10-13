@@ -210,9 +210,10 @@ def fig_runaway():
             rows[(f[0], f[1])] = (float(f[7]), float(f[8]), float(f[10]))
     sel = [('Si-NPC', 'motor, start', 'motoring, start-up'), ('Si-NPC', 'motor, top speed', 'motoring, maximum speed'),
            ('Si-NPC', 'overload 1.5x', 'overload, 1.5 × rated'),
-           ('Si-ANPC', 'motor, top speed', 'motoring, maximum speed'), ('Si-ANPC', 'overload 1.5x', 'overload, 1.5 × rated'),
+           ('Si-ANPC', 'motor, start', 'motoring, start-up'), ('Si-ANPC', 'motor, top speed', 'motoring, maximum speed'),
+           ('Si-ANPC', 'overload 1.5x', 'overload, 1.5 × rated'),
            ('SiC-ANPC', 'motor, start', 'motoring, start-up'), ('SiC-ANPC', 'motor, top speed', 'motoring, maximum speed'),
-           ('SiC-ANPC', 'brake, top speed', 'braking, maximum speed'), ('SiC-ANPC', 'overload 1.5x', 'overload, 1.5 × rated')]
+           ('SiC-ANPC', 'overload 1.5x', 'overload, 1.5 × rated')]
     col = {'Si-NPC': OK['blue'], 'Si-ANPC': OK['verm'], 'SiC-ANPC': OK['green']}
     fig, ax = plt.subplots(figsize=(190 * MM, 64 * MM))
     y, ticks, labels, prev = 0.0, [], [], None
