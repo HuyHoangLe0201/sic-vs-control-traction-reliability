@@ -21,7 +21,7 @@ def table(st, rule, label, extra=''):
         ce = [f"{D(c, 'base') / J[v][c]['bounds_tw'][st]['D_bound_rip']:.0f}" for c in C]
         ga = [f"{D(c, 'base') / D(c, 'har'):.1f}" for c in C]
         rows.append(lab + ' & ' + ' & '.join(sh + ce + ga) + r' \\')
-    return r'''\begin{table}[!htbp]
+    return r'''\begin{table}[pos=!htbp]
 \centering
 \caption{All variants, ''' + rule + r''' rule: ripple share, ceiling and reduction by the ripple-aware law.}
 \label{''' + label + r'''}
