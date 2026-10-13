@@ -2,7 +2,7 @@
 
 Simulation code and result files for the paper
 
-> *Thermal control versus silicon carbide for extending power-module lifetime in railway traction inverters*, submitted to Microelectronics Reliability.
+> *Active thermal control versus silicon carbide substitution: bounds on power-module lifetime extension in railway traction inverters*, submitted to Microelectronics Reliability.
 
 The study compares, for a 650 kW three-level traction inverter on a high-speed mission, loss redistribution through
 redundant switching states (Si NPC and ANPC legs) with the substitution of Si IGBTs by SiC MOSFETs (SiC ANPC leg). All
