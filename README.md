@@ -110,7 +110,7 @@ algebra libraries.
 | Sec. 6.1, Table E.1 | `bang_t2.py` |
 | Sec. 6.2, baseplate solder | `phantich_p0.py` |
 | Appendix D, numerical checks | `p_round3.py`, `p_tmin_mission.py`, `p14_refine.py`, `p19_share.py`, `p_harm.py`, `xung_p04.py` |
-| Appendix D, cut-off of the damage model in the ripple bound; amplitude correction versus rainflow of the pulse-resolved history | `p_cutoff.py`, `p_floor_check.py`, `p_mc3.py` |
+| Appendix D, cut-off of the damage model in the ripple bound; amplitude correction versus rainflow of the pulse-resolved history | `p_cutoff.py`, `p_floor_check.py`, `p_mc3.py`, `p_mc3b.py` (36 mission points, all policies) |
 | Tables E.2–E.3, all variants | `bang_allvar.py` |
 
 ## Licence
