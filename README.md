@@ -2,7 +2,7 @@
 
 Simulation code and result files for the paper
 
-> *Active thermal control versus silicon carbide substitution: bounds on power-module lifetime extension in railway traction inverters*, submitted to Microelectronics Reliability.
+> *Linear-programming bounds on active thermal control versus silicon carbide substitution in railway traction inverters*, submitted to Computers and Electrical Engineering.
 
 The study compares, for a 650 kW three-level traction inverter on a high-speed mission, loss redistribution through
 redundant switching states (Si NPC and ANPC legs) with the substitution of Si IGBTs by SiC MOSFETs (SiC ANPC leg). All
@@ -102,6 +102,7 @@ algebra libraries.
 | Sec. 3.3–3.4, Proposition 1, ripple-aware law | `dao_dong.py`, `p15_bound.py` |
 | Sec. 2.4, rainflow and CIPS08 | `tonthuong.py` |
 | Sec. 4, Table 2, Figs. 7–8 | `tran_daodong.py`, `hanhtrinh.py`, `so_lieu_bai.py`, `hinh_bai.py` |
+| Sec. 3.6, size and solve time of the linear programs | `p_lp_timing.py` |
 | Sec. 5.2, Table 4 | `xung_policy.py`, `p04_mission.py`, `p04_summary.py`, `xung_p04.py` |
 | Sec. 5.2, pulse-resolved model in every design variant, Table E.4 | `chay_p04m_var.py`, `p04_var_summary.py`, `bang_pulsevar.py` |
 | Sec. 5.3, Table 5, superposed rainflow | `phantich_p0.py`, `p11_rainflow.py` |
