@@ -86,7 +86,7 @@ The full chain, in order:
    `python gop_bound_fine.py`, which merges the floor into `daodong_*.json` as `bounds_fine` and checks that no
    simulated policy falls below it. `kaggle_pbf/day_len.py` runs the same jobs as private Kaggle CPU kernels
    (`run_pbf.py`, points distributed over four cores, about 25 min per job; at most five concurrent sessions).
-   `python cap_nhat_bang_sens.py` writes the ceiling columns of Table 5.
+   `python cap_nhat_bang_sens.py <path>/sec5_robust.tex` writes the ceiling columns of Table 5.
 7. `python chay_p04m.py`: pulse-resolved correction for the base case and the utilisation sweep (`p04_mission.py`),
    about 3.5 h on 7 cores.
 8. Post-processing, figures and tables as above.

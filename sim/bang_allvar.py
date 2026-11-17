@@ -47,5 +47,7 @@ NPC, ANPC, SiC: Si-NPC, Si-ANPC and SiC-ANPC inverters; $h_{\mathrm{eff}}$ in \s
 \end{minipage}
 '''
 tex = table('ton_clip', 'clipped', 'tab:allvar', note) + '\n' + table('ton_free', 'unclipped', 'tab:allvar2', note)
-open(os.path.join(HERE, '..', 'P4_CAEE', 'appC_allvar.tex'), 'w', encoding='utf-8').write(tex)
+OUT = os.environ.get('P4_OUT', os.path.join(HERE, 'out'))
+os.makedirs(OUT, exist_ok=True)
+open(os.path.join(OUT, 'appC_allvar.tex'), 'w', encoding='utf-8').write(tex)
 print(tex[:900])

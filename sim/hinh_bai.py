@@ -9,7 +9,8 @@ import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
 import tonhao as th, tonthuong as tt, dao_dong as dd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, '..', 'P4_CAEE', 'fig')
+OUT = os.environ.get('P4_OUT', os.path.join(HERE, 'out'))
+os.makedirs(OUT, exist_ok=True)
 os.makedirs(OUT, exist_ok=True)
 th.use_sink(os.path.join(HERE, 'tannhiet_step.npz'))
 VAR = 'fvdr'

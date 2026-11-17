@@ -1,9 +1,9 @@
-"""Replace the ceiling columns (NPC, ANPC) of Table tab:sens in P4_CAEE/sec5_robust.tex by the tightened floor
-('bounds_fine', clipped rule). python cap_nhat_bang_sens.py"""
-import io, os, json
+"""Replace the ceiling columns (NPC, ANPC) of Table tab:sens (Table 5) in the manuscript file sec5_robust.tex by the
+tightened floor ('bounds_fine', clipped rule). python cap_nhat_bang_sens.py <path to sec5_robust.tex>"""
+import io, os, sys, json
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FN = os.path.join(HERE, '..', 'P4_CAEE', 'sec5_robust.tex')
+FN = sys.argv[1]
 V = {'Base case': 'fvdr', 'Derating to 75\\%': 'fvdr75', '$h_{\\mathrm{eff}}=2500$': 'fvdr_h2500',
      '$h_{\\mathrm{eff}}=10000$': 'fvdr_h10000', 'Plate \\SI{10}{mm}': 'fvdr_t10', 'Plate \\SI{30}{mm}': 'fvdr_t30',
      'Coolant \\SI{50}{\\celsius}': 'fvdr_tw50', 'Coolant \\SI{60}{\\celsius}': 'fvdr_tw60',
