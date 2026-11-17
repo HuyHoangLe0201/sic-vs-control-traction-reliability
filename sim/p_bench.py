@@ -9,9 +9,11 @@ constraints, thermal model and mission as the paper's own laws:
             equivalent here: centred offset, zero-level path shares constant over each half period (one mixing ratio
             per sign of the reference), chosen to minimise the peak mean junction temperature (equalised devices).
             Not applicable to the NPC leg, which has no zero-level path choice.
-  'bal'  -- thermal-stress balancing in the sense of FS-MPC balancing of junction temperatures (Novak et al., OJPEL 2
-            (2021) 124): the full redundant-state class (offset and path), objective = spread of the mean junction
-            temperatures max_k T_k - min_k T_k (+ 1 % of the peak as tie-break).
+  'bal'  -- thermal-stress balancing after Novak et al., OJPEL 2 (2021) 124: their FS-MPC penalises the switching of the
+            most stressed switches (eq. 6; current-weighted for NPC, eq. 7) with weights tuned for the smallest
+            junction-temperature difference between inner and outer switches. Steady-state equivalent here: the full
+            redundant-state class (offset and path), objective = spread of the mean junction temperatures of the outer
+            and inner switches (T1-T4, S1-S4), max - min, + 1 % of the peak temperature of all chips as tie-break.
 
 Both are evaluated with losses frozen at the baseline equilibrium (as the mean-temperature law of the paper) and
 simulated over the mission with the carrier-averaged model; damage of the most damaged chip for both heating-time
@@ -95,14 +97,17 @@ def solve_policy(th, tp, r, m, kind, Tw):
         bub = np.r_[-Tw * np.ones(nc), bnp]
         Aeq = np.hstack([A, np.zeros((len(A), 1))])
         bounds = [(0, None)] * nv + [(None, None)]
-    else:                                   # 'bal': min (tmax - tmin) + 0.01 tmax: variables x, tmax, tmin
-        c = np.r_[np.zeros(nv), 1.01, -1.0]
-        Aub = np.vstack([np.hstack([ZM, -np.ones((nc, 1)), np.zeros((nc, 1))]),
-                         np.hstack([-ZM, np.zeros((nc, 1)), np.ones((nc, 1))]),
-                         np.hstack([Anp, np.zeros((len(bnp), 2))])])
-        bub = np.r_[-Tw * np.ones(nc), Tw * np.ones(nc), bnp]
-        Aeq = np.hstack([A, np.zeros((len(A), 2))])
-        bounds = [(0, None)] * nv + [(None, None)] * 2
+    else:   # 'bal': min (tmax - tmin) over the outer and inner switches + 0.01 peak of all chips; vars x, tmax, tmin, tpk
+        sel = [i for i, nm in enumerate(tp['names']) if nm in ('T1', 'T2', 'T3', 'T4', 'S1', 'S2', 'S3', 'S4')]
+        ZS, ns = ZM[sel], len(sel)
+        c = np.r_[np.zeros(nv), 1.0, -1.0, 0.01]
+        Aub = np.vstack([np.hstack([ZS, -np.ones((ns, 1)), np.zeros((ns, 2))]),
+                         np.hstack([-ZS, np.zeros((ns, 1)), np.ones((ns, 1)), np.zeros((ns, 1))]),
+                         np.hstack([ZM, np.zeros((nc, 2)), -np.ones((nc, 1))]),
+                         np.hstack([Anp, np.zeros((len(bnp), 3))])])
+        bub = np.r_[-Tw * np.ones(ns), Tw * np.ones(ns), -Tw * np.ones(nc), bnp]
+        Aeq = np.hstack([A, np.zeros((len(A), 3))])
+        bounds = [(0, None)] * nv + [(None, None)] * 3
     res = th.solve_lp(c, A_ub=sparse.csr_matrix(Aub), b_ub=bub, A_eq=sparse.csr_matrix(Aeq), b_eq=bq, bounds=bounds)
     if res.x is None:
         return None, res.status
@@ -165,7 +170,7 @@ def summary():
                     rows.append((lab, b[f'{kind}|{st}']['D'], b[f'{kind}|E_loss_MJ'], b[f'{kind}|dV_max']))
             for tag, lab in (('ha', 'mean-temperature law (paper)'), ('har', 'ripple-aware law (paper)')):
                 rows.append((lab, dd_['sim'][f'{tag}|{st}']['D'], dd_['np'][tag]['E_loss_MJ'], dd_['np'][tag]['dV_max']))
-            ceil = Db / dd_['bounds_tw'][st]['D_bound_rip']
+            ceil = Db / dd_['bounds_fine'][st]['D_bound_rip']
             for lab, D, E, dv in rows:
                 g = Db / D
                 share = f'{100 * g / ceil:.0f}%'
