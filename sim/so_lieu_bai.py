@@ -27,7 +27,7 @@ for cfg in CFGS:
         out.append('  band shares ' + ', '.join(f'{lo}-{hi} Hz: {x:.2f}' for (lo, hi), x in zip(bands, sh))
                    + f', LF: {1 - s["D_rip"]/s["D"]:.2f}')
     for st in ('ton_clip', 'ton_free'):
-        b = j.get('bounds_tw', j['bounds'])[st]
+        b = j.get('bounds_fine', j['bounds'])[st]
         out.append(f"- bound {st}: D_bound = {b['D_bound_rip']:.3g}, best candidate "
                    f"{max(b['candidates'], key=b['candidates'].get)}; ceiling = {j['sim']['base|'+st]['D']/b['D_bound_rip']:.3g}x, "
                    f"har gain = {j['sim']['base|'+st]['D']/j['sim']['har|'+st]['D']:.3g}x, ha gain = "

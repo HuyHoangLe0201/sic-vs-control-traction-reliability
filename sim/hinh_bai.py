@@ -9,7 +9,7 @@ import matplotlib; matplotlib.use('Agg'); import matplotlib.pyplot as plt
 import tonhao as th, tonthuong as tt, dao_dong as dd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.environ.get('P4_OUT', os.path.join(HERE, 'out'))
+OUT = os.path.join(HERE, '..', 'P4_CAEE', 'fig')
 os.makedirs(OUT, exist_ok=True)
 th.use_sink(os.path.join(HERE, 'tannhiet_step.npz'))
 VAR = 'fvdr'
@@ -206,7 +206,7 @@ def fig6():
     for ci, cfg in enumerate(('Si-NPC', 'Si-ANPC', 'SiC-ANPC')):
         j = json.load(open(os.path.join(HERE, f'daodong_{VAR}_{cfg}.json')))
         s = j['sim']; base = s['base|ton_clip']['D']
-        vals = [base / s['ha|ton_clip']['D'], base / s['har|ton_clip']['D'], base / j.get('bounds_tw', j['bounds'])['ton_clip']['D_bound_rip']]
+        vals = [base / s['ha|ton_clip']['D'], base / s['har|ton_clip']['D'], base / j.get('bounds_fine', j['bounds'])['ton_clip']['D_bound_rip']]
         for i, ((k, c, h, lab), v) in enumerate(zip(keys, vals)):
             ax.bar(ci + (i - 1) * w, v, w, color=c, hatch=h, edgecolor='white', lw=0.3, label=lab if ci == 0 else None)
             ax.text(ci + (i - 1) * w, v * 1.07, f'{v:.0f}' if v >= 20 else f'{v:.1f}', ha='center', fontsize=7)
@@ -301,7 +301,7 @@ def figGA():
     vals = []
     for cfg in ('Si-NPC', 'Si-ANPC'):
         j = json.load(open(os.path.join(HERE, f'daodong_{VAR}_{cfg}.json'))); s = j['sim']; b = s['base|ton_clip']['D']
-        vals.append((b / s['har|ton_clip']['D'], b / j.get('bounds_tw', j['bounds'])['ton_clip']['D_bound_rip']))
+        vals.append((b / s['har|ton_clip']['D'], b / j.get('bounds_fine', j['bounds'])['ton_clip']['D_bound_rip']))
     x = np.arange(2)
     ax[1].bar(x - 0.18, [v[0] for v in vals], 0.36, color=OK['blue'], label='ripple-aware law')
     ax[1].bar(x + 0.18, [v[1] for v in vals], 0.36, color=OK['verm'], hatch='....', edgecolor='white', lw=0.2, label='LP ceiling')

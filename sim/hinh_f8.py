@@ -20,7 +20,7 @@ def metrics(v, st):
     if not (npc and anpc and sic):
         return None
     D = lambda d, tag: d['sim'][f'{tag}|{st}']['D']
-    B = lambda d: d.get('bounds_tw', d['bounds'])[st]['D_bound_rip']
+    B = lambda d: d.get('bounds_fine', d['bounds'])[st]['D_bound_rip']
     return dict(k_sub_npc=D(sic, 'base') / D(npc, 'har'), k_sub_anpc=D(sic, 'base') / D(anpc, 'har'),
                 k_both_anpc=D(sic, 'har') / D(anpc, 'har'), k_bound_anpc=D(sic, 'base') / B(anpc),
                 g_npc=D(npc, 'base') / D(npc, 'har'), g_anpc=D(anpc, 'base') / D(anpc, 'har'),

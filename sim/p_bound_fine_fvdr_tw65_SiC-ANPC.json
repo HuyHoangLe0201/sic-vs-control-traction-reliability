@@ -1,0 +1,35 @@
+{
+ "cfg": "SiC-ANPC",
+ "variant": "fvdr_tw65",
+ "ratio": 1.02,
+ "n_points": 573,
+ "time_s": 52422.13369297981,
+ "bounds": {
+  "ton_clip": {
+   "candidates": {
+    "pair_S1S4": 2.5940200542249016e-07,
+    "pair_S2S3": 2.400991865568146e-07,
+    "pair_S5S6": 0.0,
+    "dual0": 2.5797390807149044e-07,
+    "dual1": 2.579965847351341e-07
+   },
+   "D_floor_pairs": 2.5940200542249016e-07,
+   "D_floor": 2.5940200542249016e-07,
+   "argmax": "pair_S1S4",
+   "D_floor_published": 1.7258399518382834e-07
+  },
+  "ton_free": {
+   "candidates": {
+    "pair_S1S4": 1.7289109660255567e-08,
+    "pair_S2S3": 1.5989516824006354e-08,
+    "pair_S5S6": 0.0,
+    "dual0": 1.720503699443261e-08,
+    "dual1": 1.7206643084664184e-08
+   },
+   "D_floor_pairs": 1.7289109660255567e-08,
+   "D_floor": 1.7289109660255567e-08,
+   "argmax": "pair_S1S4",
+   "D_floor_published": 1.1572963188097159e-08
+  }
+ }
+}

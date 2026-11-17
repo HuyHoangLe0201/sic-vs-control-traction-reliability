@@ -1,0 +1,35 @@
+{
+ "cfg": "SiC-ANPC",
+ "variant": "fv",
+ "ratio": 1.02,
+ "n_points": 549,
+ "time_s": 52690.63918566704,
+ "bounds": {
+  "ton_clip": {
+   "candidates": {
+    "pair_S1S4": 1.1028402326890359e-07,
+    "pair_S2S3": 1.0253121999681852e-07,
+    "pair_S5S6": 0.0,
+    "dual0": 8.972694845100991e-09,
+    "dual1": 6.661427096238266e-09
+   },
+   "D_floor_pairs": 1.1028402326890359e-07,
+   "D_floor": 1.1028402326890359e-07,
+   "argmax": "pair_S1S4",
+   "D_floor_published": 7.333756550966094e-08
+  },
+  "ton_free": {
+   "candidates": {
+    "pair_S1S4": 7.347295359936156e-09,
+    "pair_S2S3": 6.879771844513194e-09,
+    "pair_S5S6": 0.0,
+    "dual0": 6.875091391698214e-10,
+    "dual1": 5.286774506462452e-10
+   },
+   "D_floor_pairs": 7.347295359936156e-09,
+   "D_floor": 7.347295359936156e-09,
+   "argmax": "pair_S1S4",
+   "D_floor_published": 4.916240413930837e-09
+  }
+ }
+}

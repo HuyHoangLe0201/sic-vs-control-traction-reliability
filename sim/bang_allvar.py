@@ -18,7 +18,7 @@ def table(st, rule, label, extra=''):
     for v, lab in V:
         D = lambda c, t: J[v][c]['sim'][f'{t}|{st}']['D']
         sh = [f"{100 * J[v][c]['sim'][f'base|{st}']['D_rip'] / D(c, 'base'):.0f}" for c in C]
-        ce = [f"{D(c, 'base') / J[v][c]['bounds_tw'][st]['D_bound_rip']:.0f}" for c in C]
+        ce = [f"{D(c, 'base') / J[v][c]['bounds_fine'][st]['D_bound_rip']:.0f}" for c in C]
         ga = [f"{D(c, 'base') / D(c, 'har'):.1f}" for c in C]
         rows.append(lab + ' & ' + ' & '.join(sh + ce + ga) + r' \\')
     return r'''\begin{table}[pos=!htbp]
@@ -47,6 +47,5 @@ NPC, ANPC, SiC: Si-NPC, Si-ANPC and SiC-ANPC inverters; $h_{\mathrm{eff}}$ in \s
 \end{minipage}
 '''
 tex = table('ton_clip', 'clipped', 'tab:allvar', note) + '\n' + table('ton_free', 'unclipped', 'tab:allvar2', note)
-OUT = os.environ.get('P4_OUT', os.path.join(HERE, 'out')); os.makedirs(OUT, exist_ok=True)
-open(os.path.join(OUT, 'appC_allvar.tex'), 'w', encoding='utf-8').write(tex)
+open(os.path.join(HERE, '..', 'P4_CAEE', 'appC_allvar.tex'), 'w', encoding='utf-8').write(tex)
 print(tex[:900])
