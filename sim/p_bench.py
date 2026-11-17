@@ -143,7 +143,7 @@ def run(cfg):
     out = dict(cfg=cfg, sim={})
     for kind in ['base'] + kinds:
         sim = h.simulate(cfg, prof, base, kind)
-        for st in ('ton_clip', 'ton_free'):
+        for st in (donhay.SETTINGS_SIC if cfg.startswith('SiC') else donhay.SETTINGS_SI):
             dj, _ = h.damages(sim, prof, nf=donhay.nf_setting(st))
             j = int(np.argmax([x['D'] for x in dj]))
             out['sim'][f'{kind}|{st}'] = dict(chip=tp['names'][j], D=dj[j]['D'], D_rip=dj[j]['D_rip'],

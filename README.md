@@ -86,7 +86,7 @@ The full chain, in order:
    `python gop_bound_fine.py`, which merges the floor into `daodong_*.json` as `bounds_fine` and checks that no
    simulated policy falls below it. `kaggle_pbf/day_len.py` runs the same jobs as private Kaggle CPU kernels
    (`run_pbf.py`, points distributed over four cores, about 25 min per job; at most five concurrent sessions).
-   `python cap_nhat_bang_sens.py` writes the ceiling columns of Table 4.
+   `python cap_nhat_bang_sens.py` writes the ceiling columns of Table 5.
 7. `python chay_p04m.py`: pulse-resolved correction for the base case and the utilisation sweep (`p04_mission.py`),
    about 3.5 h on 7 cores.
 8. Post-processing, figures and tables as above.
@@ -98,7 +98,7 @@ algebra libraries.
 
 | Paper | Script |
 |---|---|
-| Table 1, device models | `linhkien.py` |
+| Table 2, device models | `linhkien.py` |
 | Figs. 1 and 3, drive, leg topologies and conduction paths | `hinh_mach.py` (schemdraw) |
 | Fig. 2, Fig. 4, mission | `hinh_bai.py`, `hoso_nhiemvu.py` |
 | Figs. 5, 6 and E.1, damage mechanism, ceiling and break-even concept, runaway margins | `hinh_coche.py` (Fig. E.1 from `bang_t2.md`) |
@@ -106,14 +106,14 @@ algebra libraries.
 | Sec. 3.1–3.2, Theorem 1 (Appendix A), Fig. E.2 | `tonhao.py`, `tran_lp.py` |
 | Sec. 3.3–3.4, Proposition 1, ripple-aware law | `dao_dong.py`, `p15_bound.py` |
 | Sec. 2.4, rainflow and CIPS08 | `tonthuong.py` |
-| Sec. 4, Table 2, Figs. 7–8 | `tran_daodong.py`, `hanhtrinh.py`, `so_lieu_bai.py`, `hinh_bai.py` |
+| Sec. 4, Table 3, Figs. 7–8 | `tran_daodong.py`, `hanhtrinh.py`, `so_lieu_bai.py`, `hinh_bai.py` |
 | Sec. 3.6, size and solve time of the linear programs | `p_lp_timing.py` |
-| Sec. 4.3, benchmark against published laws (temperature balancing, path mixing), Table 2 | `p_bench.py` (`p_bench.md`) |
-| Sec. 4.3, tightness of the floor, Table 3 (gap factors) | `p_bound_fine.py`, `p_gap.py` |
-| Sec. 5.2, Table 5 | `xung_policy.py`, `p04_mission.py`, `p04_summary.py`, `xung_p04.py` |
+| Sec. 4.3, benchmark against published laws (temperature balancing, path mixing, all lifetime models), Table 3 | `p_bench.py` (`p_bench.md`) |
+| Sec. 4.3, tightness of the floor, Table 4 (gap factors) | `p_bound_fine.py`, `p_gap.py` |
+| Sec. 5.2, Table 6 | `xung_policy.py`, `p04_mission.py`, `p04_summary.py`, `xung_p04.py` |
 | Sec. 5.2, pulse-resolved model in every design variant, Table E.4 | `chay_p04m_var.py`, `p04_var_summary.py`, `bang_pulsevar.py` |
-| Sec. 5.3, Table 6, superposed rainflow | `phantich_p0.py`, `p11_rainflow.py` |
-| Sec. 5.1, Table 4, Fig. 9 | `tran_daodong.py`, `hinh_f8.py`, `hinh_bai.py` |
+| Sec. 5.3, Table 7, superposed rainflow | `phantich_p0.py`, `p11_rainflow.py` |
+| Sec. 5.1, Table 5, Fig. 9 | `tran_daodong.py`, `hinh_f8.py`, `hinh_bai.py` |
 | Sec. 5.4 and Appendix E, Sobol, Monte Carlo B10, series system | `sobol2.py`, `sobol3.py`, `mc_b10.py`, `p13_scaling.py`, `p12_system.py` |
 | Sec. 6.1, Table E.1 | `bang_t2.py` |
 | Sec. 6.2, baseplate solder | `phantich_p0.py` |
